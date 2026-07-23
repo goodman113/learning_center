@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.example.learningcenter.entity.base.BaseEntity;
 
 @Entity
 @Table(name = "teachers")
@@ -12,11 +13,8 @@ import lombok.AllArgsConstructor;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Teacher {
+public class Teacher extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
