@@ -3,7 +3,7 @@ package org.example.learningcenter.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface CrudService<CD, UD, D, I> {
+public interface CrudService<CD extends Record, UD extends Record, D extends Record, I> {
 
     Page<D> getAll(Pageable pageable, String search);
 

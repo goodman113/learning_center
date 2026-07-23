@@ -1,4 +1,4 @@
 package org.example.learningcenter.entity.dto.user;
 
-public class UserDto {
+public record UserDto() {
 }

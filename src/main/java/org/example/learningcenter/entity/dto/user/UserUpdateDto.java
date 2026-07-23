@@ -1,4 +1,4 @@
 package org.example.learningcenter.entity.dto.user;
 
-public class UserUpdateDto {
+public record UserUpdateDto() {
 }
