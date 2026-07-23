@@ -1,4 +1,6 @@
 package org.example.learningcenter.entity.dto.teacher;
 
-public record TeacherUpdateDto() {
+import org.example.learningcenter.entity.dto.user.UserUpdateDto;
+
+public record TeacherUpdateDto(UserUpdateDto user) {
 }

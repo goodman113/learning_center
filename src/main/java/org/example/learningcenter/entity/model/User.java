@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
 import org.example.learningcenter.entity.enums.Role;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -29,4 +31,6 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    private LocalDate birthDate;
 }

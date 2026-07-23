@@ -1,4 +1,8 @@
 package org.example.learningcenter.entity.dto.user;
 
-public record UserDto() {
+import org.example.learningcenter.entity.enums.Role;
+
+import java.time.LocalDate;
+
+public record UserDto(String fullName, String phone, LocalDate birthDate, Role role) {
 }

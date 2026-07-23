@@ -3,6 +3,8 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.dto.student.StudentUpdateDto;
 import org.example.learningcenter.entity.dto.student.StudentCreateDto;
+import org.example.learningcenter.entity.dto.user.UserDto;
+import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.StudentMapper;
 import org.example.learningcenter.repository.StudentRepository;
 import org.example.learningcenter.validator.StudentValidator;
@@ -16,32 +18,41 @@ public class StudentService extends AbstractService<
         StudentMapper,
         StudentValidator> implements CrudService<StudentCreateDto, StudentUpdateDto, StudentDto,String>{
 
+
     protected StudentService(StudentRepository repository, StudentMapper mapper, StudentValidator validator) {
         super(repository, mapper, validator);
     }
 
     @Override
     public Page<StudentDto> getAll(Pageable pageable, String search) {
-        return null;
+        Page<Student> all = repository.findAll(pageable, search);
+        return all.map(mapper::toDto);
     }
 
     @Override
     public StudentDto get(String id) {
-        return null;
+        Student student = validator.validateIdAndGet(id);
+        return mapper.toDto(student);
     }
 
     @Override
     public StudentDto create(StudentCreateDto createDto) {
-        return null;
+        validator.validate(createDto);
+        Student entity = mapper.toEntity(createDto);
+        return mapper.toDto(repository.save(entity));
     }
 
     @Override
     public StudentDto update(StudentUpdateDto updateDto, String id) {
-        return null;
+        Student student = validator.validateIdAndGet(id);
+        mapper.mapUpdate(student,updateDto);
+        return mapper.toDto(repository.save(student));
     }
 
     @Override
     public void delete(String id) {
-
+        Student student = validator.validateIdAndGet(id);
+        student.setDeleted(true);
+        repository.save(student);
     }
 }
