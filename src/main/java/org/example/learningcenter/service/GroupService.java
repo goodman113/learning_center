@@ -6,6 +6,7 @@ import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
 import org.example.learningcenter.mapper.GroupMapper;
 import org.example.learningcenter.repository.GroupRepository;
 import org.example.learningcenter.validator.GroupValidator;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public class GroupService extends AbstractService<
@@ -40,5 +41,5 @@ public class GroupService extends AbstractService<
     @Override
     public void delete(String id) {
 
-    }> {
+    }
 }
