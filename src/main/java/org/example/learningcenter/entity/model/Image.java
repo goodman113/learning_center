@@ -9,7 +9,7 @@ import lombok.Setter;
 import org.example.learningcenter.entity.base.BaseEntity;
 
 @Entity
-@Table(name = "user_images")
+@Table(name = "images")
 @Getter
 @Setter
 public class Image extends BaseEntity {
