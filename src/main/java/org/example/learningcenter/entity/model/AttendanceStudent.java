@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.example.learningcenter.entity.base.BaseEntity;
+import org.example.learningcenter.entity.enums.AttendanceStatus;
 
 @Entity
 @Table(name = "attendance_students")
@@ -12,11 +14,8 @@ import lombok.AllArgsConstructor;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttendanceStudent {
+public class AttendanceStudent extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "attendance_id")

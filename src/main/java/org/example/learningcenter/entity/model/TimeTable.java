@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.example.learningcenter.entity.base.BaseEntity;
+
 import java.time.LocalTime;
 import java.util.List;
 
@@ -14,11 +16,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TimeTable {
+public class TimeTable extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ElementCollection
     @CollectionTable(name = "timetable_days", joinColumns = @JoinColumn(name = "timetable_id"))
