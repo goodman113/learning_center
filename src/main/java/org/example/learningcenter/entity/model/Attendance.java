@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "attendances")
@@ -21,5 +23,16 @@ public class Attendance extends BaseEntity {
     @JoinColumn(name = "lesson_id", unique = true)
     private Lesson lesson;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @OneToMany(
+            mappedBy = "attendance",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<AttendanceStudent> attendanceStudents = new ArrayList<>();
+
+    // Helper method to keep both sides of the relationship linked
+    public void addStudentAttendance(AttendanceStudent studentAttendance) {
+        attendanceStudents.add(studentAttendance);
+        studentAttendance.setAttendance(this);
+    }
 }

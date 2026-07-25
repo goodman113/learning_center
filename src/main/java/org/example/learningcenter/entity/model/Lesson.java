@@ -18,9 +18,7 @@ import java.time.LocalDateTime;
 public class Lesson extends BaseEntity {
 
 
-    private Integer lessonNumber;
-
-    private LocalDateTime lessonDate;
+    private String lessonName;
 
     private Boolean isCompleted = false;
 

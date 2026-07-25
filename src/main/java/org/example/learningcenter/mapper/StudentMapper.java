@@ -13,6 +13,7 @@ public interface StudentMapper {
     @Mapping(source = "user", target = "userDto")
     StudentDto toDto(Student student);
 
+    @IgnoreAuditFields
     Student toEntity(StudentCreateDto studentDto);
 
     @IgnoreAuditFields
