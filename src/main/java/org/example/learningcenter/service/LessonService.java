@@ -3,6 +3,7 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.lesson.LessonCreateDto;
 import org.example.learningcenter.entity.dto.lesson.LessonDto;
 import org.example.learningcenter.entity.dto.lesson.LessonUpdateDto;
+import org.example.learningcenter.entity.model.Lesson;
 import org.example.learningcenter.mapper.LessonMapper;
 import org.example.learningcenter.mapper.LessonValidator;
 import org.example.learningcenter.repository.LessonRepository;
@@ -22,26 +23,36 @@ public class LessonService extends AbstractService<
 
     @Override
     public Page<LessonDto> getAll(Pageable pageable, String search) {
-        return null;
+        Page<Lesson> all = repository.findAll(pageable, search);
+        return all.map(mapper::toDto);
     }
 
     @Override
     public LessonDto get(String id) {
-        return null;
+        Lesson lesson = validator.validateIdAndGet(id);
+        return mapper.toDto(lesson);
     }
 
     @Override
     public LessonDto create(LessonCreateDto createDto) {
-        return null;
+        validator.validate(createDto);
+        Lesson entity = mapper.toEntity(createDto);
+        Lesson save = repository.save(entity);
+        return mapper.toDto(save);
     }
 
     @Override
     public LessonDto update(LessonUpdateDto updateDto, String id) {
-        return null;
+        Lesson lesson = validator.validateIdAndGet(id);
+        mapper.mapUpdate(lesson,updateDto);
+        Lesson save = repository.save(lesson);
+        return mapper.toDto(save);
     }
 
     @Override
     public void delete(String id) {
-
+        Lesson lesson = validator.validateIdAndGet(id);
+        lesson.setDeleted(true);
+        repository.save(lesson);
     }
 }

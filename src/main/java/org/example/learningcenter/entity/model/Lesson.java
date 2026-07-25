@@ -20,8 +20,6 @@ public class Lesson extends BaseEntity {
 
     private Integer lessonNumber;
 
-    private LocalDateTime lessonDate;
-
     private Boolean isCompleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
