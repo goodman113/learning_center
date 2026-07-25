@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring", uses = {TeacherMapper.class, GroupMapper.class})
 public interface LessonMapper {
 
-    @Mapping(source = "lessonDate", target = "createdAt")
+    @Mapping(source = "createdAt", target = "lessonDate")
     LessonDto toDto(Lesson lesson);
 
     @IgnoreAuditFields

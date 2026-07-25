@@ -1,4 +1,4 @@
-package org.example.learningcenter.mapper;
+package org.example.learningcenter.validator;
 
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.dto.lesson.LessonCreateDto;

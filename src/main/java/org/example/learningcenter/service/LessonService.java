@@ -5,7 +5,7 @@ import org.example.learningcenter.entity.dto.lesson.LessonDto;
 import org.example.learningcenter.entity.dto.lesson.LessonUpdateDto;
 import org.example.learningcenter.entity.model.Lesson;
 import org.example.learningcenter.mapper.LessonMapper;
-import org.example.learningcenter.mapper.LessonValidator;
+import org.example.learningcenter.validator.LessonValidator;
 import org.example.learningcenter.repository.LessonRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
