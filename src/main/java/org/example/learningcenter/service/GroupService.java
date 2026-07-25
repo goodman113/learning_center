@@ -1,5 +1,7 @@
 package org.example.learningcenter.service;
 
+import jakarta.transaction.Transactional;
+import org.example.learningcenter.projection.GroupProjection;
 import org.example.learningcenter.entity.dto.group.GroupDto;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
@@ -10,8 +12,6 @@ import org.example.learningcenter.validator.GroupValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class GroupService extends AbstractService<
@@ -25,12 +25,16 @@ public class GroupService extends AbstractService<
 
     @Override
     public Page<GroupDto> getAll(Pageable pageable, String search) {
-        return null;
+        Page<GroupProjection> projectionPage = repository.getAllByFilter(search,pageable);
+        return projectionPage.
+                map(mapper::toDtoFromProjection);
+
     }
 
     @Override
     public GroupDto get(String id) {
-        return null;
+        Group group = validator.validateIdAndGet(id);
+        return mapper.toDto(group);
     }
 
     @Override
@@ -42,17 +46,17 @@ public class GroupService extends AbstractService<
 
     @Override
     public GroupDto update(GroupUpdateDto updateDto, String id) {
-        return null;
+        Group group = validator.validateIdAndGet(id);
+        mapper.mapUpdate(group,updateDto);
+        return mapper.toDto(repository.save(group));
     }
 
     @Override
+    @Transactional
     public void delete(String id) {
+        Group group = validator.validateIdAndGet(id);
+        repository.updateDeleted(group.getId());
 
     }
 
-    public List<GroupDto> getAll(String name, String room, String teacher, String timeTable, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<GroupProjection> projectionPage = repository.getAllByFilter(name,room,teacher,timeTable,pageable);
-        return null;
-    }
 }

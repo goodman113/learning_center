@@ -1,8 +1,6 @@
 package org.example.learningcenter.entity.base;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +19,11 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity extends IdEntity {
+public class BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

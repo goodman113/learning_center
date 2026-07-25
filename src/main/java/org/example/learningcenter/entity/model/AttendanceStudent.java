@@ -9,7 +9,10 @@ import org.example.learningcenter.entity.base.BaseEntity;
 import org.example.learningcenter.entity.enums.AttendanceStatus;
 
 @Entity
-@Table(name = "attendance_students")
+@Table(
+        name = "attendance_students",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"attendance_id", "student_id"})
+)
 @Getter
 @Setter
 @NoArgsConstructor

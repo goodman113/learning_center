@@ -1,0 +1,56 @@
+package org.example.learningcenter.service;
+
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.example.learningcenter.config.AwsConfig;
+import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.RestException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+
+import java.io.*;
+import java.net.URLConnection;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
+
+
+@Service
+@RequiredArgsConstructor
+public class S3Service {
+
+    private final S3Client s3Client;
+    private final AwsConfig config;
+
+
+    public String uploadFile(MultipartFile file) throws IOException {
+        String key = UUID.randomUUID() + "-" + file.getOriginalFilename();
+
+        s3Client.putObject(
+                PutObjectRequest.builder()
+                        .bucket(config.getBucketName())
+                        .key(key)
+                        .contentType(file.getContentType())
+                        .build(),
+                RequestBody.fromInputStream(file.getInputStream(), file.getSize())
+        );
+
+        return getPublicUrl(key);
+    }
+
+    public String getPublicUrl(String key) {
+        return String.format("https://%s.s3.%s.amazonaws.com/%s", config.getBucketName(), config.getRegion(), key);
+    }
+}

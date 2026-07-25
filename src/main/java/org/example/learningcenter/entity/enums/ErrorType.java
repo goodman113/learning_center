@@ -35,7 +35,10 @@ public enum ErrorType {
     REFRESH_TOKEN_EXPIRED("refresh.token.expired", HttpStatus.BAD_REQUEST ),
     GROUP_ALREADY_EXISTS_WITH_THIS_NAME("group.already.exists.with.this.name", HttpStatus.BAD_REQUEST),
     TEACHER_NOT_FOUND("teacher.not.found", HttpStatus.NOT_FOUND),
-    TIMETABLE_NOT_FOUND("timetable.not.found", HttpStatus.NOT_FOUND);
+    TIMETABLE_NOT_FOUND("timetable.not.found", HttpStatus.NOT_FOUND),
+    GROUP_NOT_FOUND("group.not.found", HttpStatus.NOT_FOUND),
+    INVALID_TIME_RANGE("invalid.time.range", HttpStatus.BAD_REQUEST),
+    INVALID_FILE_TYPE("invalid.file.type", HttpStatus.BAD_REQUEST);
 
 
 
