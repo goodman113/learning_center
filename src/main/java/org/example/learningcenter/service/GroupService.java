@@ -3,6 +3,7 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.group.GroupDto;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
+import org.example.learningcenter.entity.model.Group;
 import org.example.learningcenter.mapper.GroupMapper;
 import org.example.learningcenter.repository.GroupRepository;
 import org.example.learningcenter.validator.GroupValidator;
@@ -34,7 +35,9 @@ public class GroupService extends AbstractService<
 
     @Override
     public GroupDto create(GroupCreateDto createDto) {
-        return null;
+        validator.createValid(createDto);
+        Group group = mapper.toEntity(createDto);
+        return mapper.toDto(repository.save(group));
     }
 
     @Override
@@ -48,8 +51,8 @@ public class GroupService extends AbstractService<
     }
 
     public List<GroupDto> getAll(String name, String room, String teacher, String timeTable, int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<GroupProjection> projectionPage = repository.getAllByFilter(name,room,teacher,timeTable,pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GroupProjection> projectionPage = repository.getAllByFilter(name,room,teacher,timeTable,pageable);
         return null;
     }
 }
