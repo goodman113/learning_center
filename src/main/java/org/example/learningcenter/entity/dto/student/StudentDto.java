@@ -1,4 +1,6 @@
 package org.example.learningcenter.entity.dto.student;
 
-public record StudentDto() {
+import org.example.learningcenter.entity.dto.user.UserDto;
+
+public record StudentDto(UserDto userDto, String parentPhone) {
 }

@@ -3,6 +3,7 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.teacher.TeacherCreateDto;
 import org.example.learningcenter.entity.dto.teacher.TeacherDto;
 import org.example.learningcenter.entity.dto.teacher.TeacherUpdateDto;
+import org.example.learningcenter.entity.model.Teacher;
 import org.example.learningcenter.mapper.TeacherMapper;
 import org.example.learningcenter.repository.TeacherRepository;
 import org.example.learningcenter.validator.TeacherValidator;
@@ -22,26 +23,34 @@ public class TeacherService extends AbstractService<
 
     @Override
     public Page<TeacherDto> getAll(Pageable pageable, String search) {
-        return null;
+        Page<Teacher> all = repository.findAll(pageable, search);
+        return all.map(mapper::toDto);
     }
 
     @Override
     public TeacherDto get(String id) {
-        return null;
+        Teacher teacher = validator.validateIdAndGet(id);
+        return mapper.toDto(teacher);
     }
 
     @Override
     public TeacherDto create(TeacherCreateDto createDto) {
-        return null;
+       validator.validate();
+        Teacher entity = mapper.toEntity(createDto);
+        return mapper.toDto(repository.save(entity));
     }
 
     @Override
     public TeacherDto update(TeacherUpdateDto updateDto, String id) {
-        return null;
+        Teacher teacher = validator.validateIdAndGet(id);
+        mapper.mapUpdate(teacher,updateDto);
+        return mapper.toDto(repository.save(teacher));
     }
 
     @Override
     public void delete(String id) {
-
+        Teacher teacher = validator.validateIdAndGet(id);
+        teacher.setDeleted(true);
+        repository.save(teacher);
     }
 }

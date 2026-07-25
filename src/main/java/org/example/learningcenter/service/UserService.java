@@ -3,6 +3,7 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.user.UserCreateDto;
 import org.example.learningcenter.entity.dto.user.UserDto;
 import org.example.learningcenter.entity.dto.user.UserUpdateDto;
+import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.mapper.UserMapper;
 import org.example.learningcenter.repository.UserRepository;
 import org.example.learningcenter.validator.UserValidator;
@@ -22,26 +23,36 @@ public class UserService extends AbstractService<
 
     @Override
     public Page<UserDto> getAll(Pageable pageable, String search) {
-        return null;
+        Page<User> all = repository.findAll(pageable, search);
+        return all.map(mapper::toDto);
     }
 
     @Override
     public UserDto get(String id) {
-        return null;
+        User user = validator.validateIdAndGet(id);
+        return mapper.toDto(user);
     }
 
     @Override
     public UserDto create(UserCreateDto createDto) {
-        return null;
+        validator.validate(createDto);
+        User entity = mapper.toEntity(createDto);
+        User save = repository.save(entity);
+        return mapper.toDto(save);
     }
 
     @Override
     public UserDto update(UserUpdateDto updateDto, String id) {
-        return null;
+        User user = validator.validateIdAndGet(id);
+        mapper.mapUpdate(user,updateDto);
+        return mapper.toDto(repository.save(user));
     }
 
     @Override
     public void delete(String id) {
-
+        User user = validator
+                .validateIdAndGet(id);
+        user.setDeleted(true);
+        repository.save(user);
     }
 }
