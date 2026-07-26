@@ -1,6 +1,5 @@
 package org.example.learningcenter.config;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -19,14 +18,17 @@ import java.util.Map;
 @Component
 public class JwtUtils {
 
-    @Value("${spring.app.jwt.token.access-exp:180}")
+    @Value("${jwt.access.token.expire.date:180}")
     private Long accessTokenExpiration;
 
-    @Value("${spring.app.jwt.token.refresh-exp:86400}")
+    @Value("${jwt.refresh.token.expire.date:86400}")
     private Long refreshTokenExpiration;
 
-    @Value("${spring.app.jwt.secret}")
+    @Value("${jwt.access.token.secretKey}")
     private String secretKey;
+
+    @Value("${jwt.refresh.token.secretKey}")
+    private String refreshToken;
 
     public Claims extractClaims(String token) {
         return Jwts.parser()
