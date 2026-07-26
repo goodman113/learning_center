@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.example.learningcenter.entity.enums.Role;
 import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +22,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final UserRepository userRepository;
+    final UserRepository userRepository;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -60,8 +61,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 .orElseThrow();
 
         return CustomUserDetails.builder()
-                .userId(authUser.getId())
-                .role(authUser.getRole())
+                .providerId(claims.getSubject())
+                .userId(claims.get("userId", String.class))
+                .role(Role.valueOf(claims.get("role", String.class)))
                 .build();
     }
 }
