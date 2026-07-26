@@ -61,10 +61,11 @@ public class JwtUtils {
         claims.put("role", user.getRole().name());
         return claims;
     }
+
     public Map<String, Object> prepareClaims(UserDto user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getId());
-        claims.put("role",user.getRole().name());
+        claims.put("userId", user.id());
+        claims.put("role",user.role().name());
         return claims;
     }
 

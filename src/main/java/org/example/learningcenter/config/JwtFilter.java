@@ -6,9 +6,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -54,9 +55,9 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private CustomUserDetails prepareUserDetails(Claims claims) {
-//        String providerId = claims.getSubject();
-//        User authUser = userRepository.findByProviderId(providerId)
-//                .orElseThrow();
+
+        User authUser = userRepository.findByPhone(claims.getSubject())
+                .orElseThrow();
 
         return CustomUserDetails.builder()
                 .userId(authUser.getId())
