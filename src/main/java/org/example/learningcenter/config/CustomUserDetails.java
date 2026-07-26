@@ -1,0 +1,39 @@
+package org.example.learningcenter.config;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.example.learningcenter.entity.enums.Role;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+@Getter
+@Setter
+@Builder
+@ToString
+public class CustomUserDetails implements UserDetails {
+    private String providerId;
+    private String password;
+    private Role role;
+    private String userId;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> roles = new ArrayList<>();
+        roles.add(new SimpleGrantedAuthority("ROLE_"+role.name()));
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.providerId;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+}

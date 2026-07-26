@@ -1,0 +1,66 @@
+package org.example.learningcenter.config;
+
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.example.learningcenter.repository.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+@Component
+@AllArgsConstructor
+public class JwtFilter extends OncePerRequestFilter {
+
+    private final JwtUtils jwtUtils;
+    private final UserRepository userRepository;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/api/v1/auth/");
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String authorization = request.getHeader("Authorization");
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            String token = authorization.substring(7);
+
+            try {
+                Claims claims = jwtUtils.extractClaims(token);
+                System.out.println("=== Claims: " + claims);
+                System.out.println("=== Valid: " + jwtUtils.isTokenValid(claims));
+                if (jwtUtils.isTokenValid(claims)) {
+                    CustomUserDetails userDetails = prepareUserDetails(claims);
+                    Authentication auth = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            } catch (Exception e) {
+                System.out.println("=== JWT Filter Error: " + e.getMessage());
+                SecurityContextHolder.clearContext();
+            }
+        }
+        filterChain.doFilter(request,response);
+    }
+
+    private CustomUserDetails prepareUserDetails(Claims claims) {
+//        String providerId = claims.getSubject();
+//        User authUser = userRepository.findByProviderId(providerId)
+//                .orElseThrow();
+
+        return CustomUserDetails.builder()
+                .userId(authUser.getId())
+                .role(authUser.getRole())
+                .build();
+    }
+}
