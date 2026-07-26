@@ -42,6 +42,7 @@ public enum ErrorType {
 
 
 
+
     private final String msg;
     private HttpStatus status = HttpStatus.BAD_REQUEST;
 
