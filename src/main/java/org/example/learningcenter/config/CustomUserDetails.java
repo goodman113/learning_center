@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @ToString
 public class CustomUserDetails implements UserDetails {
-    private String providerId;
+    private String phone;
     private String password;
     private Role role;
     private String userId;
@@ -32,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.providerId;
+        return this.phone;
     }
 
     @Override
