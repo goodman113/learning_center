@@ -1,27 +1,26 @@
 package org.example.learningcenter.controller;
 
 import jakarta.validation.Valid;
-import org.example.learningcenter.entity.dto.image.ImageCreateDto;
+import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.dto.image.ImageDto;
 import org.example.learningcenter.entity.dto.image.ImageUpdateDto;
 import org.example.learningcenter.service.ImageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/image")
+@RequiredArgsConstructor
 public class ImageController {
 
     private final ImageService imageService;
-
-    public ImageController(ImageService imageService) {
-        this.imageService = imageService;
-    }
 
     @GetMapping
     public ResponseEntity<Page<ImageDto>> getAll(
@@ -38,10 +37,9 @@ public class ImageController {
         return ResponseEntity.ok(image);
     }
 
-    @PostMapping
-    public ResponseEntity<ImageDto> create(@Valid @RequestBody ImageCreateDto createDto) {
-        ImageDto createdImage = imageService.create(createDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdImage);
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> upload(@Valid @RequestParam MultipartFile file) throws IOException {
+        return ResponseEntity.ok(Map.of("imageUrl: ",imageService.uploadImage(file)));
     }
 
     @PutMapping("/{id}")
@@ -59,12 +57,4 @@ public class ImageController {
         return ResponseEntity.noContent().build();
     }
 
-    // Optional: Standard Endpoint for Multipart File Uploads to AWS S3
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ImageDto> uploadFile(@RequestParam("file") MultipartFile file) {
-        // You can convert 'file' to ImageCreateDto inside your service or add a custom upload method in ImageService
-        // ImageDto uploadedImage = imageService.upload(file);
-        // return ResponseEntity.status(HttpStatus.CREATED).body(uploadedImage);
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
-    }
 }

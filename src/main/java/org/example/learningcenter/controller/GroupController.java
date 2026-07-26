@@ -5,6 +5,9 @@ import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupDto;
 import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
 import org.example.learningcenter.service.GroupService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +20,12 @@ public class GroupController {
     final GroupService groupService;
 
     @GetMapping
-    public ResponseEntity<List<GroupDto>> getAllGroups(@RequestParam(required = false) String name,
-                                                       @RequestParam(required = false) String room,
-                                                       @RequestParam(required = false) String teacher,
-                                                       @RequestParam(required = false) String timeTable,
+    public ResponseEntity<Page<GroupDto>> getAllGroups(@RequestParam(required = false) String name,
+                                                       @RequestParam(required = false) String search,
                                                        @RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "20") int size) {
-        return ResponseEntity.ok(groupService.getAll(name, room, teacher, timeTable, page,size));
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(groupService.getAll(pageable,search));
     }
 
     @GetMapping("/{id}")

@@ -4,6 +4,6 @@ public record GroupUpdateDto(
         String name,
         String room,
         String teacherId,
-        String timeTable
+        String timeTableId
 ) {
 }

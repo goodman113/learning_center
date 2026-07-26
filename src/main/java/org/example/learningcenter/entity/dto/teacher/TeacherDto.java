@@ -1,6 +1,8 @@
 package org.example.learningcenter.entity.dto.teacher;
 
-public record TeacherDto(
+import org.example.learningcenter.entity.dto.user.UserDto;
 
+public record TeacherDto(
+        UserDto userDto
 ) {
 }

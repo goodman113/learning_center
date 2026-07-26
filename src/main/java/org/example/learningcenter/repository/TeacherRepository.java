@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TeacherRepository extends JpaRepository<Teacher, String> {
-    @Query(value = "select t.*,u.phone,u.full_name from teacher t join users u on u.id=t.user_id and u.deleted = false and :u.full_name ilike concat('%',:search,'%')",
-            countQuery = "select count(t.id) from teacher t join users u on u.id=t.user_id and u.deleted = false and :u.full_name ilike concat('%',:search,'%')",
+    @Query(value = "select t.*,u.phone,u.full_name from teachers t join users u on u.id=t.user_id and u.deleted = false and u.full_name ilike concat('%',:search,'%')",
+            countQuery = "select count(t.id) from teachers t join users u on u.id=t.user_id and u.deleted = false and u.full_name ilike concat('%',:search,'%')",
             nativeQuery = true)
     Page<Teacher> findAll(Pageable pageable, String search);
 }

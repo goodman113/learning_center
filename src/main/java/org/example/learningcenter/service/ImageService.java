@@ -1,21 +1,32 @@
 package org.example.learningcenter.service;
 
+import jakarta.validation.Valid;
 import org.example.learningcenter.entity.dto.image.ImageCreateDto;
 import org.example.learningcenter.entity.dto.image.ImageDto;
 import org.example.learningcenter.entity.dto.image.ImageUpdateDto;
+import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.entity.model.Image;
+import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.ImageMapper;
 import org.example.learningcenter.repository.ImageRepository;
 import org.example.learningcenter.validator.ImageValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
+@Service
 public class ImageService extends AbstractService<
         ImageRepository,
         ImageMapper,
         ImageValidator> implements CrudService<ImageCreateDto, ImageUpdateDto, ImageDto,String>{
 
-    protected ImageService(ImageRepository repository, ImageMapper mapper, ImageValidator validator) {
+    final S3Service s3Service;
+    protected ImageService(ImageRepository repository, ImageMapper mapper, ImageValidator validator, S3Service s3Service) {
         super(repository, mapper, validator);
+        this.s3Service = s3Service;
     }
 
     @Override
@@ -42,4 +53,25 @@ public class ImageService extends AbstractService<
     public void delete(String id) {
 
     }
+
+    public ImageDto uploadImage(@Valid MultipartFile file) throws IOException {
+        String filename = file.getOriginalFilename();
+        boolean validExtension = filename != null && filename.toLowerCase().endsWith(".pdf");
+        boolean validContentType = "application/pdf".equals(file.getContentType());
+
+        if (!validExtension || !validContentType) {
+            throw RestException.restThrow(ErrorType.INVALID_FILE_TYPE);
+        }
+        Image image = new Image();
+        image.setOriginalFileName(filename);
+        image.setFileSize(file.getSize());
+        image.setContentType(file.getContentType());
+        String key = s3Service.uploadFile(file);
+        image.setS3Key(key);
+        String presignedUrl = s3Service.getPublicUrl(key);
+        image.setImageUrl(presignedUrl);
+        Image save = repository.save(image);
+        return mapper.toDto(save);
+    }
+
 }
