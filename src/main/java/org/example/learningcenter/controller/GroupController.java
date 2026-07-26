@@ -20,8 +20,7 @@ public class GroupController {
     final GroupService groupService;
 
     @GetMapping
-    public ResponseEntity<Page<GroupDto>> getAllGroups(@RequestParam(required = false) String name,
-                                                       @RequestParam(required = false) String search,
+    public ResponseEntity<Page<GroupDto>> getAllGroups(@RequestParam(required = false) String search,
                                                        @RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size);

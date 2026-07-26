@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
+import org.example.learningcenter.entity.enums.GroupStatus;
 
 @Entity
 @Table(name = "groups")
@@ -27,4 +28,7 @@ public class Group extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timetable_id")
     private TimeTable timeTable;
+
+    @Enumerated(EnumType.STRING)
+    private GroupStatus status;
 }

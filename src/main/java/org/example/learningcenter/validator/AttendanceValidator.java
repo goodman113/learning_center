@@ -3,7 +3,6 @@ package org.example.learningcenter.validator;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.model.Attendance;
-import org.example.learningcenter.entity.model.Lesson;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.AttendanceRepository;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,6 @@ public class AttendanceValidator {
         if (!exists){
             throw RestException.restThrow(ErrorType.ATTENDANCE_NOT_FOUND);
         }
-
     }
 
 }
