@@ -6,9 +6,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.example.learningcenter.repository.UserRepository;
+import org.example.learningcenter.entity.enums.Role;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,7 +20,6 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final UserRepository userRepository;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -54,13 +53,10 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private CustomUserDetails prepareUserDetails(Claims claims) {
-//        String providerId = claims.getSubject();
-//        User authUser = userRepository.findByProviderId(providerId)
-//                .orElseThrow();
-
         return CustomUserDetails.builder()
-                .userId(authUser.getId())
-                .role(authUser.getRole())
+                .providerId(claims.getSubject())
+                .userId(claims.get("userId", String.class))
+                .role(Role.valueOf(claims.get("role", String.class)))
                 .build();
     }
 }
