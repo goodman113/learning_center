@@ -41,8 +41,8 @@ public class AuthService {
 
 
 
-    public LoginResponse getLoginResponseResponseEntity(LoginRequest request) {
-        String phone = request.getPhone() != null ? request.getPhone() : request.getEmail();
+    public LoginResponse getLoginResponseResponseEntity(LoginRequest request,HttpServletResponse response) {
+        String phone = request.getPhone();
 
         User user = userRepository.findByPhoneAndDeletedFalse(phone)
                 .orElseThrow(() -> RestException.restThrow(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD));
@@ -54,12 +54,11 @@ public class AuthService {
         Map<String, Object> claims = jwtUtils.prepareClaims(user);
         TokenDto accessToken = jwtUtils.generateToken(user.getPhone(), claims, "access");
         TokenDto refreshToken = jwtUtils.generateToken(user.getPhone(), claims, "refresh");
+        setRefreshCookie(response,refreshToken.getToken());
 
         return LoginResponse.builder()
                 .token(accessToken.getToken())
                 .expiry(accessToken.getExpiry())
-                .refreshToken(refreshToken.getToken())
-                .refreshExpiry(refreshToken.getExpiry())
                 .build();
     }
 
@@ -93,8 +92,6 @@ public class AuthService {
         return LoginResponse.builder()
                 .token(access.getToken())
                 .expiry(access.getExpiry())
-                .refreshToken(refresh.getToken())
-                .refreshExpiry(refresh.getExpiry())
                 .build();
     }
 
@@ -103,6 +100,7 @@ public class AuthService {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
+                .maxAge(refreshTokenExpiration)
                 .sameSite("None");
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookieBuilder.build().toString());

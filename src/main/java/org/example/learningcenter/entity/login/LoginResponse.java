@@ -10,6 +10,4 @@ import lombok.*;
 public class LoginResponse {
     private String token;
     private long expiry;
-    private String refreshToken;
-    private long refreshExpiry;
 }
