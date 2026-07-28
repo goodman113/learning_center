@@ -53,4 +53,8 @@ public class TeacherService extends AbstractService<
         teacher.setDeleted(true);
         repository.save(teacher);
     }
+
+    public Long getAllCount() {
+        return repository.countTeachersByDeleted(false);
+    }
 }

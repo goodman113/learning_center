@@ -55,4 +55,8 @@ public class StudentService extends AbstractService<
         student.setDeleted(true);
         repository.save(student);
     }
+
+    public Long getAllCount() {
+        return repository.countStudentsByDeleted(false);
+    }
 }

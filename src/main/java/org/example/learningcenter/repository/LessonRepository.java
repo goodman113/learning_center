@@ -10,4 +10,6 @@ import org.springframework.data.repository.query.Param;
 public interface LessonRepository extends JpaRepository<Lesson,String> {
     @Query(value = "select l from Lesson l where l.deleted = false and (:search is null or l.teacher.user.fullName ilike concat('%',:search,'%'))")
     Page<Lesson> findAll(Pageable pageable, @Param("search") String search);
+
+    Long countLessonsByDeleted(Boolean deleted);
 }

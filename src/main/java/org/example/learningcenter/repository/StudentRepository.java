@@ -11,4 +11,6 @@ public interface StudentRepository extends JpaRepository<Student,String> {
             countQuery = "select count(s.id) from students s JOIN users u on u.id = s.user_id where s.deleted = false and u.full_name ilike concat('%',:search,'%')",
             nativeQuery = true)
     Page<Student> findAll(Pageable pageable, String search);
+
+    Long countStudentsByDeleted(Boolean deleted);
 }
