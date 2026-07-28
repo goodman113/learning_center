@@ -6,8 +6,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.enums.Role;
 import org.example.learningcenter.entity.model.User;
+import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -58,10 +60,10 @@ public class JwtFilter extends OncePerRequestFilter {
     private CustomUserDetails prepareUserDetails(Claims claims) {
 
         User authUser = userRepository.findByPhone(claims.getSubject())
-                .orElseThrow();
+                .orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
 
         return CustomUserDetails.builder()
-                .providerId(claims.getSubject())
+                .phone(claims.getSubject())
                 .userId(claims.get("userId", String.class))
                 .role(Role.valueOf(claims.get("role", String.class)))
                 .build();

@@ -1,5 +1,7 @@
 package org.example.learningcenter.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.config.JwtUtils;
@@ -13,10 +15,7 @@ import org.example.learningcenter.repository.UserRepository;
 import org.example.learningcenter.service.AuthService;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Objects;
@@ -32,5 +31,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.getLoginResponseResponseEntity(request));
     }
 
+    @PostMapping("/refresh-token")
+    public ResponseEntity<LoginResponse> refreshToken(HttpServletRequest request,
+                                                      HttpServletResponse response) {
+        LoginResponse result = authService.refreshToken(request, response);
+        return ResponseEntity.ok(result);
+    }
 
 }

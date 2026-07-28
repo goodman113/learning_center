@@ -51,7 +51,7 @@ public class GroupMapper {
                 projection.getRoom(),
                 teacherMapper.toDto(projection.getTeacher()),
                 timeTableMapper.toDto(projection.getTimeTable()),
-                projection.status()
+                projection.getStatus()
         );
     }
 
@@ -63,8 +63,7 @@ public class GroupMapper {
         if (updateDto.teacherId() != null)
             group.setTeacher(teacherRepository.findById(updateDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)));
         if (updateDto.timeTable() != null)
-            group.setTimeTable(timeTableRepository.findById(updateDto.timeTable()).orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)));
-        ;
+            group.setTimeTable(timeTableRepository.findById(updateDto.timeTable()).orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)));;
 
     }
 }

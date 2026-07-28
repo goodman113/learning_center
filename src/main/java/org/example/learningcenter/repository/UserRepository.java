@@ -16,7 +16,9 @@ public interface UserRepository extends JpaRepository<User, String> {
             nativeQuery = true)
     Page<User> findAll(Pageable pageable, @Param("search") String search);
 
+
     Optional<User> findByPhoneAndDeletedFalse(String phone);
+
 
     @Query("select u from User u where u.phone=:phone")
     Optional<User> findByPhone(@Param("phone") String subject);

@@ -10,5 +10,5 @@ public interface GroupProjection {
     String getRoom();
     Teacher getTeacher();
     TimeTable getTimeTable();
-    GroupStatus status();
+    GroupStatus getStatus();
 }
