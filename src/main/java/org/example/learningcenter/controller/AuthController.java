@@ -31,7 +31,8 @@ public class AuthController {
             @Valid @RequestBody LoginRequest request,
             HttpServletResponse response
     ) {
-        return ResponseEntity.ok(authService.getLoginResponseResponseEntity(request,response));
+        LoginResponse loginResponseResponseEntity = authService.getLoginResponseResponseEntity(request, response);
+        return ResponseEntity.ok(loginResponseResponseEntity);
     }
 
     @PostMapping("/refresh-token")

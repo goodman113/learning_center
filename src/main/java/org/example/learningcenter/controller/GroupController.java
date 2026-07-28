@@ -32,6 +32,12 @@ public class GroupController {
         return ResponseEntity.ok(groupService.get(id));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getCount(){
+        Integer count = groupService.getCount();
+        return ResponseEntity.ok(count);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<GroupDto> updateGroup(@PathVariable String id, @RequestBody GroupUpdateDto updateDto) {
         return ResponseEntity.ok(groupService.update(updateDto, id));
@@ -47,4 +53,6 @@ public class GroupController {
         groupService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
