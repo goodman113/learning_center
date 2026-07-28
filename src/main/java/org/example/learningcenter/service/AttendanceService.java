@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,5 +110,10 @@ public class AttendanceService extends AbstractService<
                 attendance.addStudentAttendance(newRecord);
             }
         }
+    }
+
+    public Integer getCount() {
+        Optional<Integer> count = repository.getCount();
+        return count.orElse(0);
     }
 }

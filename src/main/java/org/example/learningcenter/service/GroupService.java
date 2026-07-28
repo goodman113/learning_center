@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GroupService extends AbstractService<
         GroupRepository,
@@ -59,4 +61,8 @@ public class GroupService extends AbstractService<
 
     }
 
+    public Integer getCount() {
+        Optional<Integer> count = repository.getCount();
+        return count.orElse(0);
+    }
 }

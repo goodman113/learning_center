@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/attendance")
 public class AttendanceController {
 
-    private final AttendanceService attendanceService;
+    private final AttendanceService service;
 
     public AttendanceController(AttendanceService attendanceService) {
-        this.attendanceService = attendanceService;
+        this.service = attendanceService;
     }
 
     @GetMapping
@@ -26,19 +26,25 @@ public class AttendanceController {
             Pageable pageable,
             @RequestParam(required = false) String search
     ) {
-        Page<AttendanceDto> attendances = attendanceService.getAll(pageable, search);
+        Page<AttendanceDto> attendances = service.getAll(pageable, search);
         return ResponseEntity.ok(attendances);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AttendanceDto> getById(@PathVariable String id) {
-        AttendanceDto attendance = attendanceService.get(id);
+        AttendanceDto attendance = service.get(id);
         return ResponseEntity.ok(attendance);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getCount(){
+        Integer count = service.getCount();
+        return ResponseEntity.ok(count);
     }
 
     @PostMapping
     public ResponseEntity<AttendanceDto> create(@Valid @RequestBody AttendanceCreateDto createDto) {
-        AttendanceDto createdAttendance = attendanceService.create(createDto);
+        AttendanceDto createdAttendance = service.create(createDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAttendance);
     }
 
@@ -47,13 +53,13 @@ public class AttendanceController {
             @PathVariable String id,
             @Valid @RequestBody AttendanceUpdateDto updateDto
     ) {
-        AttendanceDto updatedAttendance = attendanceService.update(updateDto, id);
+        AttendanceDto updatedAttendance = service.update(updateDto, id);
         return ResponseEntity.ok(updatedAttendance);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        attendanceService.delete(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
