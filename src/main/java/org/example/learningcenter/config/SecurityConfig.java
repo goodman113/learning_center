@@ -25,7 +25,10 @@ import java.util.List;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final JwtFilter jwtFilter;
+    private final RateLimitingFilter rateLimitingFilter;
+
     @Value("${spring.application.frontUrl}")
     private String frontUrl;
 
@@ -38,7 +41,7 @@ public class SecurityConfig {
             "/swagger-resources/**"};
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) {
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(auth -> auth
@@ -46,17 +49,14 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         );
 
+        // Single clean session management block
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
         http.cors(Customizer.withDefaults());
 
-        http.sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .sessionFixation().none()
-        );
-
+        http.addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

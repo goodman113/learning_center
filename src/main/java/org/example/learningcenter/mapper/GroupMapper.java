@@ -1,6 +1,7 @@
 package org.example.learningcenter.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.projection.GroupProjection;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupDto;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class GroupMapper {
     final TeacherRepository teacherRepository;
     final TimeTableRepository timeTableRepository;
-    final TeacherMapper  teacherMapper;
+    final TeacherMapper teacherMapper;
     final TimeTableMapper timeTableMapper;
 
     public Group toEntity(GroupCreateDto createDto) {
@@ -27,7 +28,8 @@ public class GroupMapper {
                 teacherRepository.findById(createDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)),
                 timeTableRepository.findById(createDto.timetableId()).
                         orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)),
-                createDto.status()
+                GroupStatus.STARTING
+
         );
     }
 

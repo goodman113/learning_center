@@ -1,6 +1,7 @@
 spring:
   application:
     name: learningCenter
+    frontUrl: http://localhost:5173
   servlet:
     multipart:
       max-file-size: 10MB
@@ -32,12 +33,12 @@ jwt:
     token:
       secretKey: 4f6162315a6b324d6731336c56417a426e4d3538426a76386d4e7751525a334e
       expire:
-        date: 900000 # 10 min
+        date: 900000
   refresh:
     token:
       secretKey: 62354b526d4c6d645161394a46587042594a574768344d5a71314e3658564232
       expire:
-        date: 604800000 # 7 days
+        date: 604800000
 
 springdoc:
   swagger-ui:
