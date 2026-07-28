@@ -27,6 +27,18 @@ aws:
     secret-key: OmyXCsIy6+eosGEOCyNDtOqEPn/kM+difzads+OX
 
 
+jwt:
+  access:
+    token:
+      secretKey: 4f6162315a6b324d6731336c56417a426e4d3538426a76386d4e7751525a334e
+      expire:
+        date: 900000 # 10 min
+  refresh:
+    token:
+      secretKey: 62354b526d4c6d645161394a46587042594a574768344d5a71314e3658564232
+      expire:
+        date: 604800000 # 7 days
+
 springdoc:
   swagger-ui:
     enabled: true
