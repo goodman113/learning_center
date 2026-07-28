@@ -55,4 +55,8 @@ public class LessonService extends AbstractService<
         lesson.setDeleted(true);
         repository.save(lesson);
     }
+
+    public Long getAllCount() {
+        return repository.countLessonsByDeleted(false);
+    }
 }

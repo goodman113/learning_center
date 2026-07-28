@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/lesson")
 public class LessonController {
@@ -28,6 +30,12 @@ public class LessonController {
     ) {
         Page<LessonDto> lessons = lessonService.getAll(pageable, search);
         return ResponseEntity.ok(lessons);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Map<String,Long>> count() {
+        Long count = lessonService.getAllCount();
+        return ResponseEntity.ok(Map.of("count",count));
     }
 
     @GetMapping("/{id}")

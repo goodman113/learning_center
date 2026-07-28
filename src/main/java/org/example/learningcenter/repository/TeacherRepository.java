@@ -11,4 +11,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, String> {
             countQuery = "select count(t.id) from teachers t join users u on u.id=t.user_id and u.deleted = false and u.full_name ilike concat('%',:search,'%')",
             nativeQuery = true)
     Page<Teacher> findAll(Pageable pageable, String search);
+
+    Long countTeachersByDeleted(Boolean deleted);
 }
