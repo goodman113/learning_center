@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,13 +19,15 @@ public interface GroupRepository extends JpaRepository<Group, String> {
                 g.name,
                 g.room,
                 g.teacher,
-                g.timeTable
+                g.timeTable,
+                g.status
         from Group g
-        where (:search is null or lower(g.name) like concat('%',lower(:search), '%') )
-          and (:search is null or lower(g.room) like concat('%',lower(:search),'%') )
-          and (:search is null or lower(g.teacher.user.fullName) like concat('%',lower(:search),'%') )
+        where (:search is null or g.name ilike concat('%',cast(:search as string), '%')
+        or g.room ilike concat('%',cast(:search as string),'%')
+        or ( g.teacher is not null
+        and g.teacher.user.fullName ilike concat('%',cast(:search as string),'%') ))
 """)
-    Page<GroupProjection> getAllByFilter(String search, Pageable pageable);
+    Page<GroupProjection> getAllByFilter(@Param("search") String search, Pageable pageable);
 
     @Query("""
         update Group g

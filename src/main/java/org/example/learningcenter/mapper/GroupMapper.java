@@ -25,7 +25,9 @@ public class GroupMapper {
                 createDto.name(),
                 createDto.room(),
                 teacherRepository.findById(createDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)),
-                timeTableRepository.findById(createDto.timetableId()).orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND))
+                timeTableRepository.findById(createDto.timetableId()).
+                        orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)),
+                createDto.status()
         );
     }
 
@@ -35,7 +37,8 @@ public class GroupMapper {
                 save.getName(),
                 save.getRoom(),
                 teacherMapper.toDto(save.getTeacher()),
-                timeTableMapper.toDto(save.getTimeTable())
+                timeTableMapper.toDto(save.getTimeTable()),
+                save.getStatus()
         );
     }
 
@@ -45,7 +48,8 @@ public class GroupMapper {
                 projection.getName(),
                 projection.getRoom(),
                 teacherMapper.toDto(projection.getTeacher()),
-                timeTableMapper.toDto(projection.getTimeTable())
+                timeTableMapper.toDto(projection.getTimeTable()),
+                projection.getStatus()
         );
     }
 
@@ -56,8 +60,8 @@ public class GroupMapper {
             group.setRoom(updateDto.room());
         if (updateDto.teacherId() != null)
             group.setTeacher(teacherRepository.findById(updateDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)));
-        if (updateDto.timeTableId() != null)
-            group.setTimeTable(timeTableRepository.findById(updateDto.timeTableId()).orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)));;
+        if (updateDto.timeTable() != null)
+            group.setTimeTable(timeTableRepository.findById(updateDto.timeTable()).orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)));;
 
     }
 }
