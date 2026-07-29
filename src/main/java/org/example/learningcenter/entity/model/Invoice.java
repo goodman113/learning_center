@@ -23,9 +23,6 @@ public class Invoice extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String invoiceNumber;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long numberCounter;
-
     @Column(nullable = false)
     private BigDecimal amount;
 
