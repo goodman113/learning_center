@@ -22,7 +22,6 @@ public class Student extends BaseEntity {
     private Group group;
 
     @OneToOne(optional = false)
-    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
 }

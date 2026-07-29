@@ -14,6 +14,7 @@ import java.util.List;
 public interface InvoiceProjection {
     String getId();
     String getInvoiceNumber();
+    String getStudentId();
     String getStudentUserId();
     String getStudentFullName();
     String getStudentPhone();
@@ -23,6 +24,7 @@ public interface InvoiceProjection {
     String getGroupId();
     String getGroupName();
     String getGroupRoom();
+    String getTeacherId();
     String getTeacherUserId();
     String getTeacherFullName();
     String getTeacherPhone();

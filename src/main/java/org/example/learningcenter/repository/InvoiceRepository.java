@@ -18,6 +18,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
         select
             i.id as id,
             i.invoiceNumber as invoiceNumber,
+            s.id as studentId,
             su.id as studentUserId,
             su.fullName as studentFullName,
             su.phone as studentPhone,
@@ -27,6 +28,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
             g.id as groupId,
             g.name as groupName,
             g.room as groupRoom,
+            t.id as teacherId,
             tu.id as teacherUserId,
             tu.fullName as teacherFullName,
             tu.phone as teacherPhone,
