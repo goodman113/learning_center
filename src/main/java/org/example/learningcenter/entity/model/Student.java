@@ -18,6 +18,9 @@ public class Student extends BaseEntity {
 
     private String parentPhone;
 
+    @ManyToOne
+    private Group group;
+
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;

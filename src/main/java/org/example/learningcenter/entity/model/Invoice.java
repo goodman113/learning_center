@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
+import org.example.learningcenter.entity.enums.InvoiceStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,10 +23,13 @@ public class Invoice extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String invoiceNumber;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long numberCounter;
+
     @Column(nullable = false)
     private BigDecimal amount;
 
-    private String paymentStatus; // e.g., "PAID", "PENDING", "OVERDUE"
+    private InvoiceStatus paymentStatus; // e.g., "PAID", "PENDING", "OVERDUE"
 
     private LocalDateTime issuedAt = LocalDateTime.now();
 
