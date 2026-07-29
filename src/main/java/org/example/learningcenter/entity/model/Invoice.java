@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
+import org.example.learningcenter.entity.enums.InvoiceStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,7 +26,8 @@ public class Invoice extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    private String paymentStatus; // e.g., "PAID", "PENDING", "OVERDUE"
+    @Enumerated(EnumType.STRING)
+    private InvoiceStatus paymentStatus;
 
     private LocalDateTime issuedAt = LocalDateTime.now();
 

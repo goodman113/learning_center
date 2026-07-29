@@ -38,9 +38,10 @@ public enum ErrorType {
     TIMETABLE_NOT_FOUND("timetable.not.found", HttpStatus.NOT_FOUND),
     GROUP_NOT_FOUND("group.not.found", HttpStatus.NOT_FOUND),
     INVALID_TIME_RANGE("invalid.time.range", HttpStatus.BAD_REQUEST),
-    INVALID_FILE_TYPE("invalid.file.type", HttpStatus.BAD_REQUEST);
-
-
+    INVALID_FILE_TYPE("invalid.file.type", HttpStatus.BAD_REQUEST),
+    INVOICE_NOT_FOUND("invoice.not.found", HttpStatus.NOT_FOUND),
+    STUDENT_NOT_FOUND("student.not.found", HttpStatus.NOT_FOUND),
+    INVOICE_COUNTER_NOT_FOUND("invoice.counter.not.found", HttpStatus.NOT_FOUND);
 
 
     private final String msg;

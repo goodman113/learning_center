@@ -2,6 +2,7 @@ spring:
   application:
     name: learningCenter
     frontUrl: http://localhost:5173
+    invoiceAmount: 1000000
   servlet:
     multipart:
       max-file-size: 10MB
@@ -9,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/learning_center
     username: postgres
-    password: root1234
+    password: root123
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -44,3 +45,4 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
