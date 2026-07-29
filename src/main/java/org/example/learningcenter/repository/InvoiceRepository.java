@@ -51,19 +51,20 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
         left join g.timeTable tt
         where i.deleted = false
         and (:search is null
-            or su.fullName ilike concat('%', cast(:search as string), '%')
-            or su.phone ilike concat('%', cast(:search as string), '%')
-            or g.name ilike concat('%', cast(:search as string), '%')
-            or i.invoiceNumber ilike concat('%', cast(:search as string), '%') )
-        and (:from is null or i.issuedAt >= :from)
-        and (:to is null or i.issuedAt <= :to)
+            or su.fullName ilike :search
+            or su.phone ilike :search
+            or g.name ilike :search
+            or i.invoiceNumber ilike :search )
+        and (i.issuedAt >= :from)
+        and (i.issuedAt <= :to)
         and (:status is null or i.paymentStatus = :status)
     """)
-    Page<InvoiceProjection> getAllInvoicesByFilter(@Param("search") String search,
-                                                   @Param("from") LocalDateTime from,
-                                                   @Param("to") LocalDateTime to,
-                                                   @Param("status") InvoiceStatus status,
-                                                   Pageable pageable);
-
+    Page<InvoiceProjection> getAllInvoicesByFilter(
+            @Param("search") String search,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to,
+            @Param("status") InvoiceStatus status,
+            Pageable pageable
+    );
     boolean existsByInvoiceNumber(String invoiceNumber);
 }

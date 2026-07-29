@@ -25,9 +25,14 @@ public class InvoiceService extends AbstractService<
         super(repository, mapper, validator);
     }
 
+    private String wrapSearch(String search) {
+        return search != null ? "%" + search.toLowerCase() + "%" : null;
+    }
+
     @Override
     public Page<InvoiceDto> getAll(Pageable pageable, String search) {
-        Page<InvoiceProjection> projectionPage = repository.getAllInvoicesByFilter(search, null, null, null, pageable);
+        Page<InvoiceProjection> projectionPage = repository.
+                getAllInvoicesByFilter(wrapSearch(search), null, null, null, pageable);
         return projectionPage.map(mapper::toDtoFromProjection);
     }
 
@@ -59,7 +64,9 @@ public class InvoiceService extends AbstractService<
 
     public Page<InvoiceDto> getAllInvoices(String search, LocalDateTime from, LocalDateTime to,
                                            InvoiceStatus status, Pageable pageable) {
-        Page<InvoiceProjection> projectionPage = repository.getAllInvoicesByFilter(search, from, to, status, pageable);
+        from = from == null ? LocalDateTime.now().minusYears(4) : from;
+        to = to == null ? LocalDateTime.now() : to;
+        Page<InvoiceProjection> projectionPage = repository.getAllInvoicesByFilter(wrapSearch(search), from, to, status, pageable);
         return projectionPage.map(mapper::toDtoFromProjection);
     }
 }

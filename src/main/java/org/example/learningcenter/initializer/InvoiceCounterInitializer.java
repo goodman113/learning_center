@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InvoiceCounterInitializer implements CommandLineRunner {
 
-    private InvoiceCounterRepository counterRepo;
+    final InvoiceCounterRepository counterRepo;
 
     @Override
     public void run(String ... args) {

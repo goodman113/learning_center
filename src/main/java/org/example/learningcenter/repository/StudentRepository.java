@@ -28,6 +28,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
         join Group g on s.group.id = g.id and g.status = 'ONGOING'
         join Lesson l on l.group.id = g.id and l.isCompleted = true
          where s.deleted = false
+        group by s
         having mod(count(l.id), 12) = 0
 """)
     List<Student> findAllStudentsForInvoice();

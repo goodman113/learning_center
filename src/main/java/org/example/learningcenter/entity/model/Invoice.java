@@ -26,7 +26,8 @@ public class Invoice extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    private InvoiceStatus paymentStatus; // e.g., "PAID", "PENDING", "OVERDUE"
+    @Enumerated(EnumType.STRING)
+    private InvoiceStatus paymentStatus;
 
     private LocalDateTime issuedAt = LocalDateTime.now();
 
