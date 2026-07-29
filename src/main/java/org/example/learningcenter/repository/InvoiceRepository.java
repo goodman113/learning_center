@@ -10,7 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, String> {
@@ -67,4 +69,14 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
             Pageable pageable
     );
     boolean existsByInvoiceNumber(String invoiceNumber);
+
+    List<Invoice> findInvoicesByPaymentStatus(InvoiceStatus paymentStatus);
+
+    @Query("""
+        update Invoice i
+        set i.paymentStatus = :newStatus
+        where i.paymentStatus = :oldStatus
+          and i.issuedAt <= :now
+""")
+    long findInvoicesByPaymentStatusAnd2DaysOld(InvoiceStatus oldStatus,InvoiceStatus newStatus, LocalDate now);
 }
