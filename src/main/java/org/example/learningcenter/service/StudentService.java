@@ -3,9 +3,9 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.dto.student.StudentUpdateDto;
 import org.example.learningcenter.entity.dto.student.StudentCreateDto;
-import org.example.learningcenter.entity.dto.user.UserDto;
 import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.StudentMapper;
+import org.example.learningcenter.projection.StudentProjection;
 import org.example.learningcenter.repository.StudentRepository;
 import org.example.learningcenter.validator.StudentValidator;
 import org.springframework.data.domain.Page;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class StudentService extends AbstractService<
         StudentRepository,
         StudentMapper,
-        StudentValidator> implements CrudService<StudentCreateDto, StudentUpdateDto, StudentDto,String>{
+        StudentValidator> implements CrudService<StudentCreateDto, StudentUpdateDto, StudentDto, String> {
 
 
     protected StudentService(StudentRepository repository, StudentMapper mapper, StudentValidator validator) {
@@ -25,8 +25,11 @@ public class StudentService extends AbstractService<
 
     @Override
     public Page<StudentDto> getAll(Pageable pageable, String search) {
-        Page<Student> all = repository.findAll(pageable, search);
-        return all.map(mapper::toDto);
+        Page<StudentProjection> all = repository.searchStudents(search, pageable);
+        all.getContent().forEach(proj -> {
+            System.out.println("=== Projection Raw ID: " + proj.getId());
+        });
+        return all.map(mapper::toDtoProj);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class StudentService extends AbstractService<
     @Override
     public StudentDto update(StudentUpdateDto updateDto, String id) {
         Student student = validator.validateIdAndGet(id);
-        mapper.mapUpdate(student,updateDto);
+        mapper.mapUpdate(student, updateDto);
         return mapper.toDto(repository.save(student));
     }
 

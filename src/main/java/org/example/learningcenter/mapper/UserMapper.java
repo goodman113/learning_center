@@ -19,7 +19,6 @@ public abstract class UserMapper {
     @Autowired
     protected Generator generator;
 
-    // 1. Entity to DTO
     public abstract UserDto toDto(User user);
 
     @IgnoreAuditFields

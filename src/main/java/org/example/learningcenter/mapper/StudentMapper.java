@@ -5,15 +5,26 @@ import org.example.learningcenter.entity.dto.student.StudentCreateDto;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.dto.student.StudentUpdateDto;
 import org.example.learningcenter.entity.model.Student;
+import org.example.learningcenter.projection.StudentProjection;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface StudentMapper {
 
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "parentPhone", target = "parentPhone")
+    @Mapping(source = "fullName", target = "userDto.fullName")
+    @Mapping(source = "phone", target = "userDto.phone")
+    @Mapping(source = "birthDate", target = "userDto.birthDate")
+    @Mapping(source = "userId", target = "userDto.id")
+    StudentDto toDtoProj(StudentProjection projection);
+
     @Mapping(source = "user", target = "userDto")
     StudentDto toDto(Student student);
 
+
     @IgnoreAuditFields
+    @Mapping(source = "userCreateDto", target = "user")
     Student toEntity(StudentCreateDto studentDto);
 
     @IgnoreAuditFields

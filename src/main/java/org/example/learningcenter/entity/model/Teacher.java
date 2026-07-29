@@ -16,7 +16,7 @@ import org.example.learningcenter.entity.base.BaseEntity;
 public class Teacher extends BaseEntity {
 
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
 }

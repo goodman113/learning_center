@@ -1,18 +1,24 @@
 package org.example.learningcenter.repository;
 
 import org.example.learningcenter.entity.model.Student;
+import org.example.learningcenter.projection.StudentProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface StudentRepository extends JpaRepository<Student,String> {
-    @Query(value = "select s.*, u.phone,u.full_name,u.role from students s JOIN users u on u.id = s.user_id where s.deleted = false and u.full_name ilike concat('%',:search,'%')",
-            countQuery = "select count(s.id) from students s JOIN users u on u.id = s.user_id where s.deleted = false and u.full_name ilike concat('%',:search,'%')",
-            nativeQuery = true)
-    Page<Student> findAll(Pageable pageable, String search);
+public interface StudentRepository extends JpaRepository<Student, String> {
+    @Query("""
+                SELECT s FROM Student s
+                JOIN s.user u
+                WHERE s.deleted = false
+                  AND u.deleted = false
+                  AND (:search IS NULL OR :search = '' OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :search, '%')))
+            """)
+    Page<StudentProjection> searchStudents(@Param("search") String search, Pageable pageable);
 
     Long countStudentsByDeleted(Boolean deleted);
 
