@@ -23,11 +23,14 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     Long countStudentsByDeleted(Boolean deleted);
 
     @Query("""
-            SELECT s FROM Student s
-                JOIN s.user u
-                WHERE s.deleted = false
-                  AND u.deleted = false
-                  AND s.id in (select e.student.id from Enrollment e where e.group.id=:groupId)
-            """)
-    List<StudentProjection> getStudentByGroupId(@Param("groupId") String groupId);
+        select s
+        from Student s
+        join Group g on s.group.id = g.id and g.status = 'ONGOING'
+        join Lesson l on l.group.id = g.id and l.isCompleted = true
+         where s.deleted = false
+        group by s
+        having mod(count(l.id), 12) = 0
+""")
+    List<Student> findAllStudentsForInvoice();
+
 }

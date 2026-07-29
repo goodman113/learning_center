@@ -18,7 +18,10 @@ public class Student extends BaseEntity {
 
     private String parentPhone;
 
-    @OneToOne(optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne
+    private Group group;
+
+    @OneToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
 }
