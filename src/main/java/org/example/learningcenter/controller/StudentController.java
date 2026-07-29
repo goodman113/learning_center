@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,6 +41,12 @@ public class StudentController {
     public ResponseEntity<StudentDto> getById(@PathVariable String id) {
         StudentDto student = studentService.get(id);
         return ResponseEntity.ok(student);
+    }
+
+    @GetMapping("{groupId}/students")
+    public ResponseEntity<List<StudentDto>> getStudentsByGroupId(@PathVariable String groupId){
+        List<StudentDto> studentsByGroupId = studentService.getStudentsByGroupId(groupId);
+        return ResponseEntity.ok(studentsByGroupId);
     }
 
     @PostMapping

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentService extends AbstractService<
         StudentRepository,
@@ -26,9 +28,6 @@ public class StudentService extends AbstractService<
     @Override
     public Page<StudentDto> getAll(Pageable pageable, String search) {
         Page<StudentProjection> all = repository.searchStudents(search, pageable);
-        all.getContent().forEach(proj -> {
-            System.out.println("=== Projection Raw ID: " + proj.getId());
-        });
         return all.map(mapper::toDtoProj);
     }
 
@@ -61,5 +60,13 @@ public class StudentService extends AbstractService<
 
     public Long getAllCount() {
         return repository.countStudentsByDeleted(false);
+    }
+
+    public List<StudentDto> getStudentsByGroupId(String groupId) {
+        List<StudentProjection> studentByGroupId = repository.getStudentByGroupId(groupId);
+        return studentByGroupId
+                .stream()
+                .map(mapper::toDtoProj)
+                .toList();
     }
 }

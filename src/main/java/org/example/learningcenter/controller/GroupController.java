@@ -1,9 +1,11 @@
 package org.example.learningcenter.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupDto;
 import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
+import org.example.learningcenter.projection.GroupNameProjection;
 import org.example.learningcenter.service.GroupService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,5 +56,15 @@ public class GroupController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("groups")
+    public ResponseEntity<List<GroupNameProjection>> getTeacherGroups(){
+        List<GroupNameProjection> groupNames = groupService.getGroupNames();
+        return ResponseEntity.ok(groupNames);
+    }
 
+    @GetMapping("groupInfo")
+    public ResponseEntity<FullGroupDto> getGroupWithStudents(@RequestParam(required = false) String groupId){
+        FullGroupDto groupInfo = groupService.getGroupInfo(groupId);
+        return ResponseEntity.ok(groupInfo);
+    }
 }

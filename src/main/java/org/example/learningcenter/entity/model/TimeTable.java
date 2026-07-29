@@ -23,6 +23,7 @@ public class TimeTable extends BaseEntity {
     @ElementCollection
     @CollectionTable(name = "timetable_days", joinColumns = @JoinColumn(name = "timetable_id"))
     @Column(name = "day")
+    @Enumerated(EnumType.STRING)
     private List<Days> days; // e.g., ["MONDAY", "WEDNESDAY", "FRIDAY"]
 
     private LocalTime startTime;

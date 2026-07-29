@@ -13,10 +13,10 @@ public interface StudentMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "parentPhone", target = "parentPhone")
-    @Mapping(source = "fullName", target = "userDto.fullName")
-    @Mapping(source = "phone", target = "userDto.phone")
-    @Mapping(source = "birthDate", target = "userDto.birthDate")
-    @Mapping(source = "userId", target = "userDto.id")
+    @Mapping(source = "user.fullName", target = "userDto.fullName")
+    @Mapping(source = "user.phone", target = "userDto.phone")
+    @Mapping(source = "user.birthDate", target = "userDto.birthDate")
+    @Mapping(source = "user.id", target = "userDto.id")
     StudentDto toDtoProj(StudentProjection projection);
 
     @Mapping(source = "user", target = "userDto")

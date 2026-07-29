@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("""
                 SELECT s FROM Student s
@@ -19,4 +21,13 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     Page<StudentProjection> searchStudents(@Param("search") String search, Pageable pageable);
 
     Long countStudentsByDeleted(Boolean deleted);
+
+    @Query("""
+            SELECT s FROM Student s
+                JOIN s.user u
+                WHERE s.deleted = false
+                  AND u.deleted = false
+                  AND s.id in (select e.student.id from Enrollment e where e.group.id=:groupId)
+            """)
+    List<StudentProjection> getStudentByGroupId(@Param("groupId") String groupId);
 }

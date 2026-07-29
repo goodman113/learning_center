@@ -26,8 +26,7 @@ public class GroupMapper {
                 createDto.name(),
                 createDto.room(),
                 teacherRepository.findById(createDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)),
-                timeTableRepository.findById(createDto.timetableId()).
-                        orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)),
+                timeTableRepository.save(timeTableMapper.toEntity(createDto.timeTable())),
                 GroupStatus.STARTING
 
         );

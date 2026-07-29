@@ -1,4 +1,4 @@
 package org.example.learningcenter.entity.dto.lesson;
 
-public record LessonUpdateDto() {
+public record LessonUpdateDto(String lessonName) {
 }

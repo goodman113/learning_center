@@ -58,14 +58,12 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private CustomUserDetails prepareUserDetails(Claims claims) {
-
-        User authUser = userRepository.findByPhone(claims.getSubject())
-                .orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
-
         return CustomUserDetails.builder()
                 .phone(claims.getSubject())
                 .userId(claims.get("userId", String.class))
                 .role(Role.valueOf(claims.get("role", String.class)))
+                .teacherId(claims.get("teacherId", String.class))
+                .studentId(claims.get("studentId", String.class))
                 .build();
     }
 }
