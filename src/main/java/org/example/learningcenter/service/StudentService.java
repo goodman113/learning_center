@@ -6,6 +6,7 @@ import org.example.learningcenter.entity.dto.student.StudentCreateDto;
 import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.StudentMapper;
 import org.example.learningcenter.projection.StudentProjection;
+import org.example.learningcenter.projection.StudentShowProjection;
 import org.example.learningcenter.repository.StudentRepository;
 import org.example.learningcenter.validator.StudentValidator;
 import org.springframework.data.domain.Page;
@@ -63,10 +64,10 @@ public class StudentService extends AbstractService<
     }
 
     public List<StudentDto> getStudentsByGroupId(String groupId) {
-        List<StudentProjection> studentByGroupId = repository.getStudentByGroupId(groupId);
+        List<StudentShowProjection> studentByGroupId = repository.getStudentByGroupId(groupId);
         return studentByGroupId
                 .stream()
-                .map(mapper::toDtoProj)
+                .map(mapper::toDtoShowProj)
                 .toList();
     }
 }

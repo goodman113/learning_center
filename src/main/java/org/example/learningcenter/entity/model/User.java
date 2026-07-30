@@ -24,6 +24,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String fullName;
 
+    private String imageUrl;
+
     @Column(unique = true, nullable = false)
     private String phone;
 

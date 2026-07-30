@@ -2,6 +2,7 @@ package org.example.learningcenter.repository;
 
 import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.projection.StudentProjection;
+import org.example.learningcenter.projection.StudentShowProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,6 +34,9 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 """)
     List<Student> findAllStudentsForInvoice();
 
+    @Query("SELECT s FROM Student s WHERE s.id IN " +
+            "(SELECT e.student.id FROM Enrollment e WHERE e.group.id = :groupId)")
+    List<StudentShowProjection> getStudentByGroupId(String groupId);
     @Query("""
         select s
         from Student s
