@@ -64,7 +64,7 @@ public class StudentService extends AbstractService<
     }
 
     public List<StudentDto> getStudentsByGroupId(String groupId) {
-        List<StudentShowProjection> studentByGroupId = repository.getStudentByGroupId(groupId);
+        List<StudentShowProjection> studentByGroupId = repository.getStudentShowByGroupId(groupId);
         return studentByGroupId
                 .stream()
                 .map(mapper::toDtoShowProj)
