@@ -11,10 +11,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-public interface InvoiceProjection {
+public interface  InvoiceProjection {
     String getId();
     String getInvoiceNumber();
     String getStudentId();
+    String getStudentImageUrl();
     String getStudentUserId();
     String getStudentFullName();
     String getStudentPhone();
@@ -25,6 +26,7 @@ public interface InvoiceProjection {
     String getGroupName();
     String getGroupRoom();
     String getTeacherId();
+    String getTeacherImageUrl();
     String getTeacherUserId();
     String getTeacherFullName();
     String getTeacherPhone();

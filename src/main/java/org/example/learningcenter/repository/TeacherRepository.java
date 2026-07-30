@@ -13,4 +13,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, String> {
     Page<Teacher> findAll(Pageable pageable, String search);
 
     Long countTeachersByDeleted(Boolean deleted);
+
+    Teacher findTeacherByUser_Id(String userId);
 }

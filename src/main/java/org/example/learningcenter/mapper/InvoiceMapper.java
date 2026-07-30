@@ -62,7 +62,9 @@ public class InvoiceMapper {
                         projection.getStudentId(),
                         new UserDto(
                                 projection.getStudentUserId(),
+
                                 projection.getStudentFullName(),
+                                projection.getStudentImageUrl(),
                                 projection.getStudentPhone(),
                                 projection.getStudentBirthDate(),
                                 projection.getStudentRole()
@@ -77,6 +79,7 @@ public class InvoiceMapper {
                                 projection.getTeacherId(),
                                 new UserDto(
                                 projection.getTeacherUserId(),
+                                projection.getTeacherImageUrl(),
                                 projection.getTeacherFullName(),
                                 projection.getTeacherPhone(),
                                 projection.getTeacherBirthDate(),

@@ -38,7 +38,13 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     @Query(value = "select count(id) from groups where deleted=false", nativeQuery = true)
     Optional<Integer> getCount();
 
-    @Query("SELECT g.name,g.id from Group g where g.teacher.user.id = :userId")
+    @Query("""
+                SELECT g.id as id, g.name as name
+                from Group g
+                left join g.teacher t
+                left join t.user u
+                where u.id = :userId and g.deleted = false
+                   """)
     List<GroupNameProjection> findAllGroupNames(@Param("userId") String teacherId);
 
     @Query("SELECT g FROM Group g WHERE g.teacher.user.id = :userId AND g.status = 'ONGOING'")

@@ -33,4 +33,11 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 """)
     List<Student> findAllStudentsForInvoice();
 
+    @Query("""
+        select s
+        from Student s
+        where s.group.id = :groupId
+        and s.deleted = false
+""")
+    List<StudentProjection> getStudentByGroupId(String groupId);
 }

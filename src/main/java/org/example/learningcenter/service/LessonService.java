@@ -3,8 +3,12 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.lesson.LessonCreateDto;
 import org.example.learningcenter.entity.dto.lesson.LessonDto;
 import org.example.learningcenter.entity.dto.lesson.LessonUpdateDto;
+import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.model.Lesson;
+import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.LessonMapper;
+import org.example.learningcenter.repository.GroupRepository;
+import org.example.learningcenter.repository.TeacherRepository;
 import org.example.learningcenter.validator.LessonValidator;
 import org.example.learningcenter.repository.LessonRepository;
 import org.springframework.data.domain.Page;
@@ -17,8 +21,17 @@ public class LessonService extends AbstractService<
         LessonMapper,
         LessonValidator> implements CrudService<LessonCreateDto, LessonUpdateDto, LessonDto,String>{
 
-    protected LessonService(LessonRepository repository, LessonMapper mapper, LessonValidator validator) {
+    final GroupRepository groupRepository;
+    final UserService userService;
+    final TeacherRepository teacherRepository;
+
+
+
+    protected LessonService(LessonRepository repository, LessonMapper mapper, LessonValidator validator, GroupRepository groupRepository, UserService userService, TeacherRepository teacherRepository) {
         super(repository, mapper, validator);
+        this.groupRepository = groupRepository;
+        this.userService = userService;
+        this.teacherRepository = teacherRepository;
     }
 
     @Override
@@ -36,9 +49,19 @@ public class LessonService extends AbstractService<
     @Override
     public LessonDto create(LessonCreateDto createDto) {
         validator.validate(createDto);
-        Lesson entity = mapper.toEntity(createDto);
+        Lesson entity = toEntity(createDto);
         Lesson save = repository.save(entity);
         return mapper.toDto(save);
+    }
+
+    private Lesson toEntity(LessonCreateDto createDto) {
+        return new Lesson(
+                createDto.lessonName(),
+                false,
+            groupRepository.findById(createDto.groupId()).orElseThrow(()-> RestException
+                    .restThrow(ErrorType.GROUP_NOT_FOUND)),
+            teacherRepository.findTeacherByUser_Id(userService.getCurrentUser().getId())
+        );
     }
 
     @Override
@@ -59,4 +82,6 @@ public class LessonService extends AbstractService<
     public Long getAllCount() {
         return repository.countLessonsByDeleted(false);
     }
+
+
 }
