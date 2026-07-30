@@ -18,6 +18,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
+    @OneToOne
+    private Image image;
 
     @Column(nullable = false)
     private String fullName;

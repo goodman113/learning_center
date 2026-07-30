@@ -36,5 +36,12 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
     @Query("SELECT s FROM Student s WHERE s.id IN " +
             "(SELECT e.student.id FROM Enrollment e WHERE e.group.id = :groupId)")
-    List<StudentShowProjection> getStudentByGroupId(String groupId);
+    List<StudentShowProjection> getStudentShowByGroupId(String groupId);
+    @Query("""
+        select s
+        from Student s
+        where s.group.id = :groupId
+        and s.deleted = false
+""")
+    List<StudentProjection> getStudentByGroupId(String groupId);
 }

@@ -22,4 +22,10 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("select u from User u where u.phone=:phone")
     Optional<User> findByPhone(@Param("phone") String subject);
+
+    @Query("""
+        select u
+        from User u where u.phone = :username
+""")
+    Optional<User> findUserByPhone(String username);
 }
