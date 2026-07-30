@@ -6,6 +6,7 @@ import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.dto.student.StudentUpdateDto;
 import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.projection.StudentProjection;
+import org.example.learningcenter.projection.StudentShowProjection;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
@@ -30,4 +31,11 @@ public interface StudentMapper {
     @IgnoreAuditFields
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void mapUpdate(@MappingTarget Student student, StudentUpdateDto updateDto);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "parentPhone", target = "parentPhone")
+    @Mapping(source = "fullName", target = "userDto.fullName")
+    @Mapping(source = "phone", target = "userDto.phone")
+    @Mapping(source = "imageUrl", target = "userDto.imageUrl")
+    StudentDto toDtoShowProj(StudentShowProjection studentShowProjection);
 }

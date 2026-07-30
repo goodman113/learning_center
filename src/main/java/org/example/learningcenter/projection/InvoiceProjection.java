@@ -38,5 +38,5 @@ public interface InvoiceProjection {
     LocalTime getTimeTableStartTime();
     LocalTime getTimeTableEndTime();
     GroupStatus getGroupStatus();
-
+    String getImageUrl();
 }
