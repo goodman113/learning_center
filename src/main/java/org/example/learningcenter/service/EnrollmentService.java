@@ -1,11 +1,19 @@
 package org.example.learningcenter.service;
 
+import jakarta.validation.Valid;
 import org.example.learningcenter.entity.dto.enrollment.EnrollmentCreateDto;
 import org.example.learningcenter.entity.dto.enrollment.EnrollmentDto;
 import org.example.learningcenter.entity.dto.enrollment.EnrollmentUpdateDto;
+import org.example.learningcenter.entity.dto.student.StudentCreateDto;
+import org.example.learningcenter.entity.model.Enrollment;
+import org.example.learningcenter.entity.model.Group;
+import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.EnrollmentMapper;
+import org.example.learningcenter.mapper.StudentMapper;
 import org.example.learningcenter.repository.EnrollmentRepository;
 import org.example.learningcenter.validator.EnrollmentValidator;
+import org.example.learningcenter.validator.GroupValidator;
+import org.example.learningcenter.validator.StudentValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,34 +22,68 @@ import org.springframework.stereotype.Service;
 public class EnrollmentService extends AbstractService<
         EnrollmentRepository,
         EnrollmentMapper,
-        EnrollmentValidator> implements CrudService<EnrollmentCreateDto, EnrollmentUpdateDto, EnrollmentDto,String>{
+        EnrollmentValidator> implements CrudService<EnrollmentCreateDto, EnrollmentUpdateDto, EnrollmentDto, String> {
 
-    protected EnrollmentService(EnrollmentRepository repository, EnrollmentMapper mapper, EnrollmentValidator validator) {
+    private final StudentValidator studentValidator;
+    private final GroupValidator groupValidator;
+    private final StudentMapper studentMapper;
+
+    protected EnrollmentService(EnrollmentRepository repository, EnrollmentMapper mapper, EnrollmentValidator validator, StudentValidator studentValidator, GroupValidator groupValidator, StudentMapper studentMapper) {
         super(repository, mapper, validator);
+        this.studentValidator = studentValidator;
+        this.groupValidator = groupValidator;
+        this.studentMapper = studentMapper;
     }
 
     @Override
     public Page<EnrollmentDto> getAll(Pageable pageable, String search) {
-        return null;
+        Page<Enrollment> allBySearch = repository.findAllBySearch(search, pageable);
+        return allBySearch.map(mapper::toDto);
+    }
+
+    public Page<EnrollmentDto> getAll(Pageable pageable, String search, String groupId) {
+        Page<Enrollment> allBySearch = repository.findAllBySearch(search, groupId, pageable);
+        return allBySearch.map(mapper::toDto);
     }
 
     @Override
     public EnrollmentDto get(String id) {
-        return null;
+        Enrollment enrollment = validator.validateIdAndGet(id);
+        return mapper.toDto(enrollment);
     }
 
     @Override
     public EnrollmentDto create(EnrollmentCreateDto createDto) {
-        return null;
+        Student student = studentValidator.validateIdAndGet(createDto.studentId());
+        Group group = groupValidator.validateIdAndGet(createDto.groupId());
+        Enrollment enrollment = new Enrollment(student, group, createDto.reason(), null);
+        return mapper.toDto(repository.save(enrollment));
     }
 
     @Override
     public EnrollmentDto update(EnrollmentUpdateDto updateDto, String id) {
-        return null;
+        Enrollment enrollment = validator.validateIdAndGet(id);
+        Student student = studentValidator.validateIdAndGet(updateDto.studentId());
+        Group group = groupValidator.validateIdAndGet(updateDto.groupId());
+        enrollment.setGroup(group);
+        enrollment.setStudent(student);
+        return mapper.toDto(repository.save(enrollment));
     }
 
     @Override
     public void delete(String id) {
 
+    }
+
+    public void delete(String id, String reason) {
+        validator.validateId(id);
+        repository.softDelete(reason, id);
+    }
+
+    public EnrollmentDto create(StudentCreateDto createDto, EnrollmentCreateDto enrollmentCreateDto) {
+        Group group = groupValidator.validateIdAndGet(enrollmentCreateDto.groupId());
+        Student student = studentMapper.toEntity(createDto);
+        Enrollment enrollment = new Enrollment(student, group, enrollmentCreateDto.reason(), null);
+        return mapper.toDto(repository.save(enrollment));
     }
 }

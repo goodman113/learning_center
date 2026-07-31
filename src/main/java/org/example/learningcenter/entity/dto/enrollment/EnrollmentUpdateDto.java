@@ -1,4 +1,6 @@
 package org.example.learningcenter.entity.dto.enrollment;
 
-public record EnrollmentUpdateDto() {
+import jakarta.annotation.Nonnull;
+
+public record EnrollmentUpdateDto(@Nonnull String studentId, @Nonnull String groupId) {
 }

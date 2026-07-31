@@ -44,4 +44,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
         and s.deleted = false
 """)
     List<StudentProjection> getStudentByGroupId(String groupId);
+
+    @Query("select s from Student s where s.user.phone like :phone and s.deleted = false")
+    List<Student> getStudentByPhone(@Param("phone") String phone);
 }

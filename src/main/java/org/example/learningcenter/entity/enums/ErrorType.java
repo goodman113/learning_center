@@ -12,6 +12,7 @@ public enum ErrorType {
     PAGE_NOT_FOUND("page.not.found", HttpStatus.NOT_FOUND),
     USER_NOT_FOUND("user.not.found", HttpStatus.NOT_FOUND),
     LESSON_NOT_FOUND("lesson,not.found", HttpStatus.NOT_FOUND),
+    ENROLLMENT_NOT_FOUND("enrollment.not.found",HttpStatus.NOT_FOUND),
     ATTENDANCE_NOT_FOUND("attendance.not.found",HttpStatus.NOT_FOUND),
     UNSUPPORTED_MEDIA_TYPE("unsupported.media.type", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
     METHOD_NOT_ALLOWED("method.not.allowed", HttpStatus.METHOD_NOT_ALLOWED),

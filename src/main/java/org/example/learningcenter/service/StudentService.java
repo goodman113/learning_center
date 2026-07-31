@@ -70,4 +70,12 @@ public class StudentService extends AbstractService<
                 .map(mapper::toDtoShowProj)
                 .toList();
     }
+
+    public List<StudentDto> getByPhone(String phone) {
+        List<Student> studentsByPhone = repository.getStudentByPhone(phone);
+        return studentsByPhone
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
 }

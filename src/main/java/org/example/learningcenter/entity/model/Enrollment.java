@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Enrollment extends BaseEntity {
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id")
     private Student student;
@@ -26,5 +25,7 @@ public class Enrollment extends BaseEntity {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    private LocalDateTime enrolledAt = LocalDateTime.now();
+    private String studyingReason;
+
+    private String leavingReason;
 }

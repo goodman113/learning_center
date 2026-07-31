@@ -32,9 +32,10 @@ public class StudentController {
         Page<StudentDto> students = studentService.getAll(pageable, search);
         return ResponseEntity.ok(students);
     }
+
     @GetMapping("/count")
-    public ResponseEntity<Map<String, Long>> count(){
-        return ResponseEntity.ok(Map.of("count",studentService.getAllCount()));
+    public ResponseEntity<Map<String, Long>> count() {
+        return ResponseEntity.ok(Map.of("count", studentService.getAllCount()));
     }
 
     @GetMapping("/{id}")
@@ -43,8 +44,14 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
+    @GetMapping("/phone")
+    public ResponseEntity<List<StudentDto>> getByPhone(@RequestParam String phone) {
+        List<StudentDto> student = studentService.getByPhone(phone);
+        return ResponseEntity.ok(student);
+    }
+
     @GetMapping("{groupId}/students")
-    public ResponseEntity<List<StudentDto>> getStudentsByGroupId(@PathVariable String groupId){
+    public ResponseEntity<List<StudentDto>> getStudentsByGroupId(@PathVariable String groupId) {
         List<StudentDto> studentsByGroupId = studentService.getStudentsByGroupId(groupId);
         return ResponseEntity.ok(studentsByGroupId);
     }
