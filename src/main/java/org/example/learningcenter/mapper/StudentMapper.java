@@ -37,5 +37,6 @@ public interface StudentMapper {
     @Mapping(source = "fullName", target = "userDto.fullName")
     @Mapping(source = "phone", target = "userDto.phone")
     @Mapping(source = "imageUrl", target = "userDto.imageUrl")
+    @Mapping(source = "birthDate", target = "userDto.birthDate")
     StudentDto toDtoShowProj(StudentShowProjection studentShowProjection);
 }

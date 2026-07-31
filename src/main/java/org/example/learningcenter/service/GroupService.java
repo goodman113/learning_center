@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.enums.Days;
+import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.TimeTable;
 import org.example.learningcenter.projection.GroupNameProjection;
 import org.example.learningcenter.projection.GroupProjection;
@@ -46,7 +47,14 @@ public class GroupService extends AbstractService<
 
     @Override
     public Page<GroupDto> getAll(Pageable pageable, String search) {
-        Page<GroupProjection> projectionPage = repository.getAllByFilter(search, pageable);
+//        Page<GroupProjection> projectionPage = repository.getAllByFilter(search, pageable);
+//        return projectionPage.
+//                map(mapper::toDtoFromProjection);
+        return null;
+    }
+
+    public Page<GroupDto> getAll(Pageable pageable, String search, GroupStatus status) {
+        Page<GroupProjection> projectionPage = repository.getAllByFilter(search, pageable, status);
         return projectionPage.
                 map(mapper::toDtoFromProjection);
 
@@ -94,16 +102,16 @@ public class GroupService extends AbstractService<
         if (groupId == null) {
             String userId = userValidator.authenticateAndGetId();
             List<Group> allByTeacherId = repository.findAllByTeacherUserId(userId);
-            if (allByTeacherId.isEmpty()){
+            if (allByTeacherId.isEmpty()) {
                 return null;
             }
             String today = LocalDate.now().getDayOfWeek().toString().toUpperCase();
             Group group = calculateTimeTable(today, allByTeacherId);
-            if (group == null){
+            if (group == null) {
                 // try tomorrow
-                group = calculateTimeTable(LocalDate.now().plusDays(1).getDayOfWeek().toString().toUpperCase(),allByTeacherId);
+                group = calculateTimeTable(LocalDate.now().plusDays(1).getDayOfWeek().toString().toUpperCase(), allByTeacherId);
             }
-            if (group==null){
+            if (group == null) {
                 return null;
             }
             GroupDto dto = mapper.toDto(group);

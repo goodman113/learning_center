@@ -55,14 +55,9 @@ public class GroupMapper {
     }
 
     public void mapUpdate(Group group, GroupUpdateDto updateDto) {
-        if (updateDto.name() != null)
-            group.setName(updateDto.name());
-        if (updateDto.room() != null)
-            group.setRoom(updateDto.room());
         if (updateDto.teacherId() != null)
             group.setTeacher(teacherRepository.findById(updateDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)));
-        if (updateDto.timeTable() != null)
-            group.setTimeTable(timeTableRepository.findById(updateDto.timeTable()).orElseThrow(() -> RestException.restThrow(ErrorType.TIMETABLE_NOT_FOUND)));;
-
+        timeTableMapper.update(group.getTimeTable(), updateDto.timeTable());
+        timeTableRepository.save(group.getTimeTable());
     }
 }

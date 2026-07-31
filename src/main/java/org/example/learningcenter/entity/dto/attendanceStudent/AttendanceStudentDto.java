@@ -4,6 +4,6 @@ import org.example.learningcenter.entity.enums.AttendanceStatus;
 
 public record AttendanceStudentDto(
         String studentId,
-        String studentName,
+        String studentFullName,
         AttendanceStatus status
 ) {}

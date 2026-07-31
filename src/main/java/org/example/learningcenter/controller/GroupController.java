@@ -1,15 +1,18 @@
 package org.example.learningcenter.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupDto;
 import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
+import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.projection.GroupNameProjection;
 import org.example.learningcenter.service.GroupService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +27,10 @@ public class GroupController {
     @GetMapping
     public ResponseEntity<Page<GroupDto>> getAllGroups(@RequestParam(required = false) String search,
                                                        @RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "20") int size) {
+                                                       @RequestParam(defaultValue = "20") int size,
+                                                       @RequestParam(defaultValue = "STARTING") GroupStatus status) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(groupService.getAll(pageable,search));
+        return ResponseEntity.ok(groupService.getAll(pageable, search, status));
     }
 
     @GetMapping("/{id}")
@@ -35,18 +39,18 @@ public class GroupController {
     }
 
     @GetMapping("/count")
-    public ResponseEntity<Integer> getCount(){
+    public ResponseEntity<Integer> getCount() {
         Integer count = groupService.getCount();
         return ResponseEntity.ok(count);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GroupDto> updateGroup(@PathVariable String id, @RequestBody GroupUpdateDto updateDto) {
+    public ResponseEntity<GroupDto> updateGroup(@PathVariable String id, @Valid @RequestBody GroupUpdateDto updateDto) {
         return ResponseEntity.ok(groupService.update(updateDto, id));
     }
 
     @PostMapping
-    public ResponseEntity<GroupDto> createGroup(@RequestBody GroupCreateDto groupCreateDto) {
+    public ResponseEntity<GroupDto> createGroup(@Valid @RequestBody GroupCreateDto groupCreateDto) {
         return ResponseEntity.ok(groupService.create(groupCreateDto));
     }
 
@@ -57,13 +61,13 @@ public class GroupController {
     }
 
     @GetMapping("groups")
-    public ResponseEntity<List<GroupNameProjection>> getTeacherGroups(){
+    public ResponseEntity<List<GroupNameProjection>> getTeacherGroups() {
         List<GroupNameProjection> groupNames = groupService.getGroupNames();
         return ResponseEntity.ok(groupNames);
     }
 
     @GetMapping("groupInfo")
-    public ResponseEntity<FullGroupDto> getGroupWithStudents(@RequestParam(required = false) String groupId){
+    public ResponseEntity<FullGroupDto> getGroupWithStudents(@RequestParam(required = false) String groupId) {
         FullGroupDto groupInfo = groupService.getGroupInfo(groupId);
         return ResponseEntity.ok(groupInfo);
     }

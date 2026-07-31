@@ -1,5 +1,6 @@
 package org.example.learningcenter.repository;
 
+import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.projection.GroupNameProjection;
 import org.example.learningcenter.projection.GroupProjection;
 import org.example.learningcenter.entity.model.Group;
@@ -21,11 +22,12 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     @Query("""
                 select g
                 from Group g
-                where (:search is null or g.name ilike concat('%', cast(:search as string), '%')
+                where (:status is null or g.status =:status)
+                and (:search is null or g.name ilike concat('%', cast(:search as string), '%')
                 or g.room ilike concat('%', cast(:search as string), '%')
                 or (g.teacher is not null and g.teacher.user.fullName ilike concat('%', cast(:search as string), '%')))
             """)
-    Page<GroupProjection> getAllByFilter(@Param("search") String search, Pageable pageable);
+    Page<GroupProjection> getAllByFilter(@Param("search") String search, Pageable pageable, @Param("status") GroupStatus status);
 
     @Query("""
                     update Group g
