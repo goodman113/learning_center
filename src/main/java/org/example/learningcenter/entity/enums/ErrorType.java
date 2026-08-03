@@ -42,7 +42,8 @@ public enum ErrorType {
     INVALID_FILE_TYPE("invalid.file.type", HttpStatus.BAD_REQUEST),
     INVOICE_NOT_FOUND("invoice.not.found", HttpStatus.NOT_FOUND),
     STUDENT_NOT_FOUND("student.not.found", HttpStatus.NOT_FOUND),
-    INVOICE_COUNTER_NOT_FOUND("invoice.counter.not.found", HttpStatus.NOT_FOUND);
+    INVOICE_COUNTER_NOT_FOUND("invoice.counter.not.found", HttpStatus.NOT_FOUND),
+    PASSWORDS_DO_NOT_MATCH("passwords.do.not.match", HttpStatus.BAD_REQUEST);
 
 
     private final String msg;
