@@ -49,6 +49,6 @@ public interface GroupRepository extends JpaRepository<Group, String> {
                    """)
     List<GroupNameProjection> findAllGroupNames(@Param("userId") String teacherId);
 
-    @Query("SELECT g FROM Group g WHERE g.teacher.user.id = :userId AND g.status = 'ONGOING'")
+    @Query("SELECT g FROM Group g WHERE g.teacher.user.id = :userId AND g.status = 'ONGOING' and g.deleted = false")
     List<Group> findAllByTeacherUserId(@Param("userId") String userId);
 }
