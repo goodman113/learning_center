@@ -1,6 +1,6 @@
 package org.example.learningcenter.repository;
 
-import org.example.learningcenter.entity.enums.Days;
+import org.example.learningcenter.entity.enums.DayType;
 import org.example.learningcenter.entity.model.TimeTable;
 import org.example.learningcenter.projection.TimeTableProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,7 +25,7 @@ public interface TimeTableRepository extends JpaRepository<TimeTable, String> {
               and (:start is null or t.startTime >= :start)
               and (:end is null or t.endTime <= :end)
     """)
-    List<TimeTableProjection> getAllTimeTableByFilter(List<Days> days_1, LocalTime start, LocalTime end);
+    List<TimeTableProjection> getAllTimeTableByFilter(DayType dayType, LocalTime start, LocalTime end);
 
     @Modifying
     @Query("""

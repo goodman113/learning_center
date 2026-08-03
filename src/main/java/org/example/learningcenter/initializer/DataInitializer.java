@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor ////implements CommandLineRunner
-public class DataInitializer  {
+public class DataInitializer {
 
     final UserRepository userRepository;
     final TeacherRepository teacherRepository;
@@ -106,13 +106,13 @@ public class DataInitializer  {
 
         // ============ TIMETABLES ============
         TimeTable tt1 = new TimeTable();
-        tt1.setDays(List.of(Days.MONDAY, Days.WEDNESDAY, Days.FRIDAY));
+        tt1.setDayType(DayType.ODD);
         tt1.setStartTime(LocalTime.of(9, 0));
         tt1.setEndTime(LocalTime.of(11, 0));
         timeTableRepository.save(tt1);
 
         TimeTable tt2 = new TimeTable();
-        tt2.setDays(List.of(Days.TUESDAY, Days.THURSDAY));
+        tt2.setDayType(DayType.EVEN);
         tt2.setStartTime(LocalTime.of(14, 0));
         tt2.setEndTime(LocalTime.of(16, 0));
         timeTableRepository.save(tt2);

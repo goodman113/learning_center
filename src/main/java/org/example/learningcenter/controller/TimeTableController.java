@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.dto.TimeTableCreateDto;
 import org.example.learningcenter.entity.dto.TimeTableUpdateDto;
 import org.example.learningcenter.entity.dto.timeTable.TimeTableDto;
-import org.example.learningcenter.entity.enums.Days;
-import org.example.learningcenter.entity.model.TimeTable;
+import org.example.learningcenter.entity.enums.DayType;
 import org.example.learningcenter.service.TimeTableService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -22,10 +20,10 @@ public class TimeTableController {
 
 
     @GetMapping
-    public ResponseEntity<List<TimeTableDto>> findAll(@RequestParam(required = false)List<Days> days,
+    public ResponseEntity<List<TimeTableDto>> findAll(@RequestParam(required = false) DayType dayType,
                                       @RequestParam(required = false, defaultValue = "00:00") LocalTime start,
                                       @RequestParam(required = false, defaultValue = "23:59:59") LocalTime end) {
-        return ResponseEntity.ok(service.getAll(days,start,end));
+        return ResponseEntity.ok(service.getAll(dayType,start,end));
     }
 
     @GetMapping("/{id}")

@@ -14,7 +14,7 @@ public class TimeTableMapper {
     public TimeTableDto toDto(TimeTable timeTable) {
         return new TimeTableDto(
                 timeTable.getId(),
-                timeTable.getDays(),
+                timeTable.getDayType(),
                 timeTable.getStartTime(),
                 timeTable.getEndTime()
         );
@@ -23,7 +23,7 @@ public class TimeTableMapper {
     public TimeTableDto toDtoFromProjection(TimeTableProjection timeTableProjection) {
         return new TimeTableDto(
                 timeTableProjection.getId(),
-                timeTableProjection.getDays(),
+                timeTableProjection.getDayType(),
                 timeTableProjection.getStartTime(),
                 timeTableProjection.getEndTime()
         );
@@ -31,7 +31,7 @@ public class TimeTableMapper {
 
     public TimeTable toEntity(TimeTableCreateDto createDto) {
         return new TimeTable(
-                createDto.days(),
+                createDto.dayType(),
                 createDto.startTime(),
                 createDto.endTime()
         );
@@ -42,7 +42,7 @@ public class TimeTableMapper {
             timeTable.setStartTime(updateDto.startTime());
         if (updateDto.endTime() != null)
             timeTable.setEndTime(updateDto.endTime());
-        if (updateDto.days() != null)
-            timeTable.setDays(updateDto.days());
+        if (updateDto.dayType() != null)
+            timeTable.setDayType(updateDto.dayType());
     }
 }

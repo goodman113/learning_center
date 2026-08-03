@@ -1,13 +1,12 @@
 package org.example.learningcenter.entity.dto.timeTable;
 
-import org.example.learningcenter.entity.enums.Days;
+import org.example.learningcenter.entity.enums.DayType;
 
 import java.time.LocalTime;
-import java.util.List;
 
 public record TimeTableDto(
         String id,
-        List<Days> days,
+        DayType dayType,
         LocalTime startTime,
         LocalTime endTime
 ) {
