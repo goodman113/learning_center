@@ -192,25 +192,21 @@ public class DataInitializer  {
         Enrollment enrollment1 = new Enrollment();
         enrollment1.setStudent(student1);
         enrollment1.setGroup(group1);
-        enrollment1.setEnrolledAt(LocalDateTime.now().minusMonths(3));
         entityManager.persist(enrollment1);
 
         Enrollment enrollment2 = new Enrollment();
         enrollment2.setStudent(student2);
         enrollment2.setGroup(group1);
-        enrollment2.setEnrolledAt(LocalDateTime.now().minusMonths(3));
         entityManager.persist(enrollment2);
 
         Enrollment enrollment3 = new Enrollment();
         enrollment3.setStudent(student3);
         enrollment3.setGroup(group2);
-        enrollment3.setEnrolledAt(LocalDateTime.now().minusMonths(1));
         entityManager.persist(enrollment3);
 
         Enrollment enrollment4 = new Enrollment();
         enrollment4.setStudent(student4);
         enrollment4.setGroup(group2);
-        enrollment4.setEnrolledAt(LocalDateTime.now().minusMonths(1));
         entityManager.persist(enrollment4);
 
         // ============ INVOICES ============

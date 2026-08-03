@@ -1,54 +1,55 @@
 package org.example.learningcenter.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.dto.enrollment.EnrollmentCreateDto;
 import org.example.learningcenter.entity.dto.enrollment.EnrollmentDto;
 import org.example.learningcenter.entity.dto.enrollment.EnrollmentUpdateDto;
+import org.example.learningcenter.entity.dto.student.StudentCreateDto;
 import org.example.learningcenter.service.EnrollmentService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("api/v1/enrollment")
+@RequestMapping("api/v1/enrollments")
 public class EnrollmentController {
 
-    final EnrollmentService enrollmentService;
+    private final EnrollmentService enrollmentService;
+
+    public EnrollmentController(EnrollmentService enrollmentService) {
+        this.enrollmentService = enrollmentService;
+    }
 
     @GetMapping
     public ResponseEntity<Page<EnrollmentDto>> getAll(
+            Pageable pageable,
             @RequestParam(required = false) String search,
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "20") Integer size
+            @RequestParam(required = false) String groupId
     ) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<EnrollmentDto> teachers = enrollmentService.getAll(pageable, search);
-        return ResponseEntity.ok(teachers);
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<Map<String, Long>> count() {
-        Long count = enrollmentService.getAllCount();
-        return ResponseEntity.ok(Map.of("count",count));
+        Page<EnrollmentDto> enrollments = groupId == null ? enrollmentService.getAll(pageable, search) : enrollmentService.getAll(pageable, search, groupId);
+        return ResponseEntity.ok(enrollments);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EnrollmentDto> getById(@PathVariable String id) {
-        EnrollmentDto teacher = enrollmentService.get(id);
-        return ResponseEntity.ok(teacher);
+        EnrollmentDto enrollment = enrollmentService.get(id);
+        return ResponseEntity.ok(enrollment);
     }
 
     @PostMapping
     public ResponseEntity<EnrollmentDto> create(@Valid @RequestBody EnrollmentCreateDto createDto) {
-        EnrollmentDto createdTeacher = enrollmentService.create(createDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTeacher);
+        EnrollmentDto createdEnrollment = enrollmentService.create(createDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEnrollment);
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<EnrollmentDto> create(
+            @Valid @RequestBody StudentCreateDto createDto,
+            @Valid @RequestBody EnrollmentCreateDto enrollment) {
+        EnrollmentDto createdEnrollment = enrollmentService.create(createDto,enrollment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEnrollment);
     }
 
     @PutMapping("/{id}")
@@ -56,13 +57,13 @@ public class EnrollmentController {
             @PathVariable String id,
             @Valid @RequestBody EnrollmentUpdateDto updateDto
     ) {
-        EnrollmentDto updatedTeacher = enrollmentService.update(updateDto, id);
-        return ResponseEntity.ok(updatedTeacher);
+        EnrollmentDto updatedEnrollment = enrollmentService.update(updateDto, id);
+        return ResponseEntity.ok(updatedEnrollment);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        enrollmentService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable String id, @RequestParam String reason) {
+        enrollmentService.delete(id,reason);
         return ResponseEntity.noContent().build();
     }
 }

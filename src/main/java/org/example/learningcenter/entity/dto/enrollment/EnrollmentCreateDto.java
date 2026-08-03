@@ -1,7 +1,6 @@
 package org.example.learningcenter.entity.dto.enrollment;
 
-public record EnrollmentCreateDto(
-        String studentId,
-        String groupId
-) {
+import jakarta.annotation.Nonnull;
+
+public record EnrollmentCreateDto(String studentId, @Nonnull String groupId, String reason) {
 }
