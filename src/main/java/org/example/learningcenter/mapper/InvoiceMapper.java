@@ -87,7 +87,7 @@ public class InvoiceMapper {
                         ),
                         new TimeTableDto(
                                 projection.getTimeTableId(),
-                                projection.getTimeTableDays(),
+                                projection.getTimeTableDayType(),
                                 projection.getTimeTableStartTime(),
                                 projection.getTimeTableEndTime()
                         ),

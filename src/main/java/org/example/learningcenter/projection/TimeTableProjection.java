@@ -1,14 +1,12 @@
 package org.example.learningcenter.projection;
 
-import org.example.learningcenter.entity.enums.Days;
+import org.example.learningcenter.entity.enums.DayType;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 public interface TimeTableProjection {
     String getId();
-    List<Days> getDays();
+    DayType getDayType();
     LocalTime getStartTime();
     LocalTime getEndTime();
 }

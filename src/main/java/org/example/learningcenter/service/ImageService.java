@@ -10,6 +10,7 @@ import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.ImageMapper;
 import org.example.learningcenter.repository.ImageRepository;
 import org.example.learningcenter.validator.ImageValidator;
+import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,15 +24,19 @@ public class ImageService extends AbstractService<
         ImageMapper,
         ImageValidator> implements CrudService<ImageCreateDto, ImageUpdateDto, ImageDto,String>{
 
-    final S3Service s3Service;
-    protected ImageService(ImageRepository repository, ImageMapper mapper, ImageValidator validator, S3Service s3Service) {
+    private final S3Service s3Service;
+    private final UserValidator userValidator;
+
+    protected ImageService(ImageRepository repository, ImageMapper mapper, ImageValidator validator, S3Service s3Service, UserValidator userValidator) {
         super(repository, mapper, validator);
         this.s3Service = s3Service;
+        this.userValidator = userValidator;
     }
 
     @Override
     public Page<ImageDto> getAll(Pageable pageable, String search) {
-        return null;
+        String userId = userValidator.authenticateAndGetId();
+        repository.findAllByUserId(userId);
     }
 
     @Override

@@ -6,10 +6,9 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
-import org.example.learningcenter.entity.enums.Days;
+import org.example.learningcenter.entity.enums.DayType;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Table(name = "timetables")
@@ -19,12 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 public class TimeTable extends BaseEntity {
 
-
-    @ElementCollection
-    @CollectionTable(name = "timetable_days", joinColumns = @JoinColumn(name = "timetable_id"))
-    @Column(name = "day")
+    @Column(name = "day_type")
     @Enumerated(EnumType.STRING)
-    private List<Days> days; // e.g., ["MONDAY", "WEDNESDAY", "FRIDAY"]
+    private DayType dayType;
 
     private LocalTime startTime;
     private LocalTime endTime;

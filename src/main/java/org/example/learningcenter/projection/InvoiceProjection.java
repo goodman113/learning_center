@@ -1,9 +1,6 @@
 package org.example.learningcenter.projection;
 
-import org.example.learningcenter.entity.enums.Days;
-import org.example.learningcenter.entity.enums.GroupStatus;
-import org.example.learningcenter.entity.enums.InvoiceStatus;
-import org.example.learningcenter.entity.enums.Role;
+import org.example.learningcenter.entity.enums.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,7 +33,7 @@ public interface  InvoiceProjection {
     LocalDateTime getIssuedAt();
     InvoiceStatus getStatus();
     String getTimeTableId();
-    List<Days> getTimeTableDays();
+    DayType getTimeTableDayType();
     LocalTime getTimeTableStartTime();
     LocalTime getTimeTableEndTime();
     GroupStatus getGroupStatus();

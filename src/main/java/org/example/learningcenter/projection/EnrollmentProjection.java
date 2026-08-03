@@ -1,13 +1,12 @@
 package org.example.learningcenter.projection;
 
-import org.example.learningcenter.entity.enums.Days;
+import org.example.learningcenter.entity.enums.DayType;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.enums.Role;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 public interface EnrollmentProjection {
     String getId();
@@ -30,7 +29,7 @@ public interface EnrollmentProjection {
     LocalDate getTeacherBirthDate();
     Role getTeacherRole();
     String getTimeTableId();
-    List<Days> getTimeTableDays();
+    DayType getTimeTableDayType();
     LocalTime getTimeTableStartTime();
     LocalTime getTimeTableEndTime();
     GroupStatus getGroupStatus();

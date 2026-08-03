@@ -3,7 +3,7 @@ package org.example.learningcenter.service;
 import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.student.StudentDto;
-import org.example.learningcenter.entity.enums.Days;
+import org.example.learningcenter.entity.enums.DayType;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.TimeTable;
 import org.example.learningcenter.projection.GroupNameProjection;
@@ -24,10 +24,8 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoField;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -105,11 +103,11 @@ public class GroupService extends AbstractService<
             if (allByTeacherId.isEmpty()) {
                 return null;
             }
-            String today = LocalDate.now().getDayOfWeek().toString().toUpperCase();
-            Group group = calculateTimeTable(today, allByTeacherId);
+            DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
+            Group group = calculateTimeTable(dayOfWeek, allByTeacherId);
             if (group == null) {
                 // try tomorrow
-                group = calculateTimeTable(LocalDate.now().plusDays(1).getDayOfWeek().toString().toUpperCase(), allByTeacherId);
+                group = calculateTimeTable(LocalDate.now().plusDays(1).getDayOfWeek(), allByTeacherId);
             }
             if (group == null) {
                 return null;
@@ -124,11 +122,11 @@ public class GroupService extends AbstractService<
         return new FullGroupDto(studentsByGroupId, dto);
     }
 
-    private Group calculateTimeTable(String today, List<Group> allByTeacherId) {
+    private Group calculateTimeTable(DayOfWeek dayOfWeek, List<Group> allByTeacherId) {
         Group nearestGroup = null;
         for (Group group : allByTeacherId) {
             TimeTable timeTable = group.getTimeTable();
-            if (timeTable.getDays().contains(Days.valueOf(today))) {
+            if (Objects.equals(isOddOrEvenDayOfWeek(dayOfWeek),timeTable.getDayType())) {
                 LocalTime startTime = timeTable.getStartTime();
                 LocalTime now = LocalTime.now();
                 if (startTime.isAfter(now)) {
@@ -143,5 +141,9 @@ public class GroupService extends AbstractService<
             }
         }
         return nearestGroup;
+    }
+
+    public DayType isOddOrEvenDayOfWeek(DayOfWeek dayOfWeek) {
+        return dayOfWeek.getValue() % 2 != 0 ? DayType.ODD : DayType.EVEN;
     }
 }
