@@ -52,4 +52,12 @@ public enum ErrorType {
         this.msg = msg;
         this.status = status;
     }
+
+    ErrorType(String msg) {
+        this.msg = msg;
+    }
+
+    public int getStatusValue() {
+        return status.value();
+    }
 }
