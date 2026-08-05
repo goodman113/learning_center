@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.learningcenter.annotation.CurrentUser;
 import org.example.learningcenter.config.JwtUtils;
+import org.example.learningcenter.entity.dto.user.UserDto;
 import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.login.LoginRequest;
 import org.example.learningcenter.entity.login.LoginResponse;
 import org.example.learningcenter.entity.login.TokenDto;
 import org.example.learningcenter.entity.model.User;
+import org.example.learningcenter.entity.request.ChangePasswordRequest;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.UserRepository;
 import org.example.learningcenter.service.AuthService;
@@ -42,4 +45,15 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/change-password")
+    public ResponseEntity<Map<String, String>> changePassword(@Valid @RequestBody ChangePasswordRequest request,
+                                               @CurrentUser User user) {
+        String response =  authService.changePassword(request, user);
+        return ResponseEntity.ok(Map.of("response", response));
+    }
+
+    @GetMapping("/me")
+    public  ResponseEntity<UserDto> me(@CurrentUser User user) {
+        return ResponseEntity.ok(authService.getMe(user));
+    }
 }
