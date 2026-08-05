@@ -42,13 +42,12 @@ public class ImageController {
         return ResponseEntity.ok(Map.of("imageUrl: ",imageService.uploadImage(file)));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ImageDto> update(
-            @PathVariable String id,
-            @Valid @RequestBody ImageUpdateDto updateDto
+    @PutMapping("/main/{id}")
+    public ResponseEntity<Void> update(
+            @PathVariable String id
     ) {
-        ImageDto updatedImage = imageService.update(updateDto, id);
-        return ResponseEntity.ok(updatedImage);
+        imageService.updateMainImg(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

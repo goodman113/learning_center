@@ -8,6 +8,7 @@ import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.model.Image;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.ImageMapper;
+import org.example.learningcenter.projection.ImageProjection;
 import org.example.learningcenter.repository.ImageRepository;
 import org.example.learningcenter.validator.ImageValidator;
 import org.example.learningcenter.validator.UserValidator;
@@ -36,7 +37,8 @@ public class ImageService extends AbstractService<
     @Override
     public Page<ImageDto> getAll(Pageable pageable, String search) {
         String userId = userValidator.authenticateAndGetId();
-        repository.findAllByUserId(userId);
+        Page<ImageProjection> allByUserId = repository.findAllByUserId(userId,pageable);
+        return allByUserId.map(mapper::toDto);
     }
 
     @Override
@@ -79,4 +81,9 @@ public class ImageService extends AbstractService<
         return mapper.toDto(save);
     }
 
+    public void updateMainImg(String id) {
+        validator.validateId(id);
+        String userId = userValidator.authenticateAndGetId();
+        repository.updateMainImg(id,userId);
+    }
 }
