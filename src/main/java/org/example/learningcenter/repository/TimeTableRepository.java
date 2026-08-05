@@ -15,7 +15,14 @@ import java.util.List;
 public interface TimeTableRepository extends JpaRepository<TimeTable, String> {
 
     @Query("""
-         select t from TimeTable t
+        select distinct t.id as id,
+            t.dayType as days,
+                   t.startTime as startTime,
+                   t.endTime as endTime
+            from TimeTable t
+            where (:days_1 is null or t.dayType = :days_1)
+              and (:start is null or t.startTime >= :start)
+              and (:end is null or t.endTime <= :end)
     """)
     List<TimeTableProjection> getAllTimeTableByFilter(DayType dayType, LocalTime start, LocalTime end);
 
