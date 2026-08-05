@@ -14,4 +14,5 @@ public interface GroupProjection {
     GroupStatus getStatus();
     GroupLevel getLevel();
     Integer getCurrentMonth();
+    Integer getLessonsCount();
 }

@@ -21,15 +21,32 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     boolean existsGroupByName(String name);
 
     @Query("""
-                select g
-                from Group g
-                where (:status is null or g.status =:status)
-                and (:level is null or g.level =:level)
-                and (:search is null or g.name ilike concat('%', cast(:search as string), '%')
-                or g.room ilike concat('%', cast(:search as string), '%')
-                or (g.teacher is not null and g.teacher.user.fullName ilike concat('%', cast(:search as string), '%')))
+                SELECT
+                    g.id AS id,
+                    g.name AS name,
+                    g.room AS room,
+                    g.teacher AS teacher,
+                    g.timeTable AS timeTable,
+                    g.status AS status,
+                    g.level AS level,
+                    g.currentMonth AS currentMonth,
+                    COUNT(l.id) AS lessonsCount
+                FROM Group g
+                LEFT JOIN Lesson l ON l.group = g and l.level=:level
+                WHERE (:status IS NULL OR g.status = :status)
+                  AND (:level IS NULL OR g.level = :level)
+                  AND (:search IS NULL 
+                       OR g.name ILIKE CONCAT('%', CAST(:search AS string), '%')
+                       OR g.room ILIKE CONCAT('%', CAST(:search AS string), '%')
+                       OR (g.teacher IS NOT NULL AND g.teacher.user.fullName ILIKE CONCAT('%', CAST(:search AS string), '%')))
+                GROUP BY g.id, g.name, g.room, g.teacher, g.timeTable, g.status, g.level, g.currentMonth
             """)
-    Page<GroupProjection> getAllByFilter(@Param("search") String search, Pageable pageable, @Param("status") GroupStatus status,@Param("level") GroupLevel level);
+    Page<GroupProjection> getAllByFilter(
+            Pageable pageable,
+            @Param("status") GroupStatus status,
+            @Param("level") GroupLevel level,
+            @Param("search") String search
+    );
 
     @Query("""
                     update Group g
@@ -43,12 +60,12 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     Optional<Integer> getCount();
 
     @Query("""
-                SELECT g.id as id, g.name as name
-                from Group g
-                left join g.teacher t
-                left join t.user u
-                where u.id = :userId and g.deleted = false
-                   """)
+            SELECT g.id as id, g.name as name
+            from Group g
+            left join g.teacher t
+            left join t.user u
+            where u.id = :userId and g.deleted = false
+            """)
     List<GroupNameProjection> findAllGroupNames(@Param("userId") String teacherId);
 
     @Query("SELECT g FROM Group g WHERE g.teacher.user.id = :userId AND g.status = 'ONGOING' and g.deleted = false")

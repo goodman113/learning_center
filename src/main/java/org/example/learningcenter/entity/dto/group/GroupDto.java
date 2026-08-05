@@ -13,7 +13,7 @@ public record GroupDto(
         TimeTableDto timeTable,
         GroupStatus status,
         GroupLevel level,
-        Integer currentMonth
-//        Integer lessonsInLevel
+        Integer currentMonth,
+        Integer lessonsCount
 ) {
 }

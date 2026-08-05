@@ -4,11 +4,13 @@ import org.example.learningcenter.entity.dto.lesson.LessonCreateDto;
 import org.example.learningcenter.entity.dto.lesson.LessonDto;
 import org.example.learningcenter.entity.dto.lesson.LessonUpdateDto;
 import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.entity.model.Group;
 import org.example.learningcenter.entity.model.Lesson;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.LessonMapper;
 import org.example.learningcenter.repository.GroupRepository;
 import org.example.learningcenter.repository.TeacherRepository;
+import org.example.learningcenter.validator.GroupValidator;
 import org.example.learningcenter.validator.LessonValidator;
 import org.example.learningcenter.repository.LessonRepository;
 import org.springframework.data.domain.Page;
@@ -19,19 +21,17 @@ import org.springframework.stereotype.Service;
 public class LessonService extends AbstractService<
         LessonRepository,
         LessonMapper,
-        LessonValidator> implements CrudService<LessonCreateDto, LessonUpdateDto, LessonDto,String>{
-
-    final GroupRepository groupRepository;
+        LessonValidator> implements CrudService<LessonCreateDto, LessonUpdateDto, LessonDto, String> {
     final UserService userService;
     final TeacherRepository teacherRepository;
+    private final GroupValidator groupValidator;
 
 
-
-    protected LessonService(LessonRepository repository, LessonMapper mapper, LessonValidator validator, GroupRepository groupRepository, UserService userService, TeacherRepository teacherRepository) {
+    protected LessonService(LessonRepository repository, LessonMapper mapper, LessonValidator validator, UserService userService, TeacherRepository teacherRepository, GroupValidator groupValidator) {
         super(repository, mapper, validator);
-        this.groupRepository = groupRepository;
         this.userService = userService;
         this.teacherRepository = teacherRepository;
+        this.groupValidator = groupValidator;
     }
 
     @Override
@@ -55,19 +55,20 @@ public class LessonService extends AbstractService<
     }
 
     private Lesson toEntity(LessonCreateDto createDto) {
+        Group group = groupValidator.validateIdAndGet(createDto.groupId());
         return new Lesson(
                 createDto.lessonName(),
                 false,
-            groupRepository.findById(createDto.groupId()).orElseThrow(()-> RestException
-                    .restThrow(ErrorType.GROUP_NOT_FOUND)),
-            teacherRepository.findTeacherByUser_Id(userService.getCurrentUser().getId())
+                group,
+                teacherRepository.findTeacherByUser_Id(userService.getCurrentUser().getId()),
+                group.getLevel()
         );
     }
 
     @Override
     public LessonDto update(LessonUpdateDto updateDto, String id) {
         Lesson lesson = validator.validateIdAndGet(id);
-        mapper.mapUpdate(lesson,updateDto);
+        mapper.mapUpdate(lesson, updateDto);
         Lesson save = repository.save(lesson);
         return mapper.toDto(save);
     }

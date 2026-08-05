@@ -35,7 +35,7 @@ public class GroupMapper {
         );
     }
 
-    public GroupDto toDto(Group save) {
+    public GroupDto toDto(Group save,Integer lessonsCount) {
         return new GroupDto(
                 save.getId(),
                 save.getName(),
@@ -44,7 +44,8 @@ public class GroupMapper {
                 timeTableMapper.toDto(save.getTimeTable()),
                 save.getStatus(),
                 save.getLevel(),
-                save.getCurrentMonth()
+                save.getCurrentMonth(),
+                lessonsCount
         );
     }
 
@@ -57,7 +58,8 @@ public class GroupMapper {
                 timeTableMapper.toDto(projection.getTimeTable()),
                 projection.getStatus(),
                 projection.getLevel(),
-                projection.getCurrentMonth()
+                projection.getCurrentMonth(),
+                projection.getLessonsCount()
         );
     }
 

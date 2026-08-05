@@ -47,7 +47,7 @@ public class InvoiceMapper {
                 invoice.getId(),
                 invoice.getInvoiceNumber(),
                 studentMapper.toDto(invoice.getStudent()),
-                groupMapper.toDto(invoice.getStudent().getGroup()),
+                groupMapper.toDto(invoice.getStudent().getGroup(),0),
                 invoice.getAmount(),
                 invoice.getIssuedAt(),
                 invoice.getPaymentStatus()
@@ -93,7 +93,8 @@ public class InvoiceMapper {
                         ),
                         projection.getGroupStatus(),
                         projection.getGroupLevel(),
-                        projection.getCurrentMonth()
+                        projection.getCurrentMonth(),
+                        0
                 ),
                 projection.getAmount(),
                 projection.getIssuedAt(),
