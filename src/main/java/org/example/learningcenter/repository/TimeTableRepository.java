@@ -16,12 +16,11 @@ public interface TimeTableRepository extends JpaRepository<TimeTable, String> {
 
     @Query("""
         select distinct t.id as id,
-            t.days as days,
+            t.dayType as days,
                    t.startTime as startTime,
                    t.endTime as endTime
             from TimeTable t
-            join t.days d
-            where (:days_1 is null or d in :days_1)
+            where (:days_1 is null or t.dayType = :days_1)
               and (:start is null or t.startTime >= :start)
               and (:end is null or t.endTime <= :end)
     """)
