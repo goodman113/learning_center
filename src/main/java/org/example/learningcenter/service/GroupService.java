@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.enums.DayType;
+import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.TimeTable;
 import org.example.learningcenter.projection.GroupNameProjection;
@@ -51,8 +52,8 @@ public class GroupService extends AbstractService<
         return null;
     }
 
-    public Page<GroupDto> getAll(Pageable pageable, String search, GroupStatus status) {
-        Page<GroupProjection> projectionPage = repository.getAllByFilter(search, pageable, status);
+    public Page<GroupDto> getAll(Pageable pageable, String search, GroupStatus status, GroupLevel level) {
+        Page<GroupProjection> projectionPage = repository.getAllByFilter(search, pageable, status, level);
         return projectionPage.
                 map(mapper::toDtoFromProjection);
 
@@ -126,7 +127,7 @@ public class GroupService extends AbstractService<
         Group nearestGroup = null;
         for (Group group : allByTeacherId) {
             TimeTable timeTable = group.getTimeTable();
-            if (Objects.equals(isOddOrEvenDayOfWeek(dayOfWeek),timeTable.getDayType())) {
+            if (Objects.equals(isOddOrEvenDayOfWeek(dayOfWeek), timeTable.getDayType())) {
                 LocalTime startTime = timeTable.getStartTime();
                 LocalTime now = LocalTime.now();
                 if (startTime.isAfter(now)) {

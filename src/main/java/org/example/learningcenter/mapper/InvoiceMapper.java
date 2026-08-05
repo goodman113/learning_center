@@ -91,7 +91,9 @@ public class InvoiceMapper {
                                 projection.getTimeTableStartTime(),
                                 projection.getTimeTableEndTime()
                         ),
-                        projection.getGroupStatus()
+                        projection.getGroupStatus(),
+                        projection.getGroupLevel(),
+                        projection.getCurrentMonth()
                 ),
                 projection.getAmount(),
                 projection.getIssuedAt(),

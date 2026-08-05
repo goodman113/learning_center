@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
+import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
 
 @Entity
@@ -31,4 +32,10 @@ public class Group extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private GroupStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private GroupLevel level;
+
+    @Column(name = "current_month", nullable = false)
+    private Integer currentMonth = 1;
 }

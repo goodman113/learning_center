@@ -3,7 +3,6 @@ package org.example.learningcenter.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.dto.image.ImageDto;
-import org.example.learningcenter.entity.dto.image.ImageUpdateDto;
 import org.example.learningcenter.service.ImageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

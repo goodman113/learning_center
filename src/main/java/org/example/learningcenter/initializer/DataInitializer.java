@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor ////implements CommandLineRunner
-public class DataInitializer {
+public class DataInitializer{
 
     final UserRepository userRepository;
     final TeacherRepository teacherRepository;
@@ -30,26 +30,26 @@ public class DataInitializer {
     final AttendanceRepository attendanceRepository;
     final PasswordEncoder passwordEncoder;
     final EntityManager entityManager;
-
+//
 //    @Override
     @Transactional
     public void run(String... args) {
 //        if (userRepository.count() > 0) return;
 
-        String encodedPassword = passwordEncoder.encode("root123");
+        String encodedPassword = passwordEncoder.encode("root1234");
 
         // ============ USERS ============
         User adminUser = new User();
         adminUser.setFullName("Admin John");
-        adminUser.setPhone("+998901234567");
+        adminUser.setPhone("1");
         adminUser.setPassword(encodedPassword);
-        adminUser.setRole(Role.SUPER_ADMIN);
+        adminUser.setRole(Role.ADMINISTRATOR);
         adminUser.setBirthDate(LocalDate.of(1990, 1, 1));
         userRepository.save(adminUser);
 
         User teacherUser1 = new User();
         teacherUser1.setFullName("Alice Teacher");
-        teacherUser1.setPhone("+998901234568");
+        teacherUser1.setPhone("2");
         teacherUser1.setPassword(encodedPassword);
         teacherUser1.setRole(Role.TEACHER);
         teacherUser1.setBirthDate(LocalDate.of(1992, 5, 10));
@@ -97,7 +97,7 @@ public class DataInitializer {
 
         // ============ TEACHERS ============
         Teacher teacher1 = new Teacher();
-        teacher1.setUser(teacherUser1);
+            teacher1.setUser(teacherUser1);
         teacherRepository.save(teacher1);
 
         Teacher teacher2 = new Teacher();

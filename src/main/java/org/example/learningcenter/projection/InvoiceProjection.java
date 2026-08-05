@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 public interface  InvoiceProjection {
     String getId();
@@ -37,5 +36,7 @@ public interface  InvoiceProjection {
     LocalTime getTimeTableStartTime();
     LocalTime getTimeTableEndTime();
     GroupStatus getGroupStatus();
+    GroupLevel getGroupLevel();
+    Integer getCurrentMonth();
     String getImageUrl();
 }
