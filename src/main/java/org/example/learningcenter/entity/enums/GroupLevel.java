@@ -16,4 +16,14 @@ public enum GroupLevel {
     GroupLevel(int durationInMonths) {
         this.durationInMonths = durationInMonths;
     }
+
+    public GroupLevel getNextLevel() {
+        GroupLevel[] levels = GroupLevel.values();
+        int nextIndex = this.ordinal() + 1;
+
+        if (nextIndex < levels.length) {
+            return levels[nextIndex];
+        }
+        return null;
+    }
 }

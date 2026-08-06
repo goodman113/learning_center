@@ -38,4 +38,21 @@ public class Group extends BaseEntity {
 
     @Column(name = "current_month", nullable = false)
     private Integer currentMonth = 1;
+
+    public void registerCompletedLesson(Integer lessonsInCurrLevel) {
+        if (lessonsInCurrLevel == 0 || lessonsInCurrLevel % 12 != 0) {
+            return;
+        }
+        if (this.currentMonth >= this.level.getDurationInMonths()) {
+            GroupLevel nextLevel = this.level.getNextLevel();
+            if (nextLevel == null) {
+                this.status = GroupStatus.COMPLETED;
+            } else {
+                this.level = nextLevel;
+                this.currentMonth = 1;
+            }
+        } else {
+            this.currentMonth++;
+        }
+    }
 }
