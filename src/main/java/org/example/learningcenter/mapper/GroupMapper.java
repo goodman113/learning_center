@@ -1,6 +1,7 @@
 package org.example.learningcenter.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.projection.GroupProjection;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
@@ -27,19 +28,24 @@ public class GroupMapper {
                 createDto.room(),
                 teacherRepository.findById(createDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)),
                 timeTableRepository.save(timeTableMapper.toEntity(createDto.timeTable())),
-                GroupStatus.STARTING
+                GroupStatus.STARTING,
+                GroupLevel.A1,
+                1
 
         );
     }
 
-    public GroupDto toDto(Group save) {
+    public GroupDto toDto(Group save,Integer lessonsCount) {
         return new GroupDto(
                 save.getId(),
                 save.getName(),
                 save.getRoom(),
                 teacherMapper.toDto(save.getTeacher()),
                 timeTableMapper.toDto(save.getTimeTable()),
-                save.getStatus()
+                save.getStatus(),
+                save.getLevel(),
+                save.getCurrentMonth(),
+                lessonsCount
         );
     }
 
@@ -50,7 +56,10 @@ public class GroupMapper {
                 projection.getRoom(),
                 teacherMapper.toDto(projection.getTeacher()),
                 timeTableMapper.toDto(projection.getTimeTable()),
-                projection.getStatus()
+                projection.getStatus(),
+                projection.getLevel(),
+                projection.getCurrentMonth(),
+                projection.getLessonsCount()
         );
     }
 

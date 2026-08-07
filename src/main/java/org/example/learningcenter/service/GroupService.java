@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.enums.DayType;
+import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.TimeTable;
 import org.example.learningcenter.projection.GroupNameProjection;
@@ -14,6 +15,7 @@ import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
 import org.example.learningcenter.entity.model.Group;
 import org.example.learningcenter.mapper.GroupMapper;
 import org.example.learningcenter.repository.GroupRepository;
+import org.example.learningcenter.repository.LessonRepository;
 import org.example.learningcenter.validator.GroupValidator;
 import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
@@ -36,11 +38,13 @@ public class GroupService extends AbstractService<
 
     private final UserValidator userValidator;
     private final StudentService studentService;
+    private final LessonRepository lessonRepository;
 
-    protected GroupService(GroupRepository repository, GroupMapper mapper, GroupValidator validator, UserValidator userValidator, StudentService studentService) {
+    protected GroupService(GroupRepository repository, GroupMapper mapper, GroupValidator validator, UserValidator userValidator, StudentService studentService, LessonRepository lessonRepository) {
         super(repository, mapper, validator);
         this.userValidator = userValidator;
         this.studentService = studentService;
+        this.lessonRepository = lessonRepository;
     }
 
     @Override
@@ -51,9 +55,9 @@ public class GroupService extends AbstractService<
         return null;
     }
 
-    public Page<GroupDto> getAll(Pageable pageable, String search, GroupStatus status) {
-        Page<GroupProjection> projectionPage = repository.getAllByFilter(search, pageable, status);
-        return projectionPage.
+    public Page<GroupDto> getAll(Pageable pageable, String search, GroupStatus status, GroupLevel level) {
+        Page<GroupProjection> groups = repository.getAllByFilter(pageable, status, level, search);
+        return groups.
                 map(mapper::toDtoFromProjection);
 
     }
@@ -61,21 +65,24 @@ public class GroupService extends AbstractService<
     @Override
     public GroupDto get(String id) {
         Group group = validator.validateIdAndGet(id);
-        return mapper.toDto(group);
+        Integer lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);
+        return mapper.toDto(group, lessonsCount);
     }
 
     @Override
     public GroupDto create(GroupCreateDto createDto) {
         validator.createValid(createDto);
         Group group = mapper.toEntity(createDto);
-        return mapper.toDto(repository.save(group));
+        Integer lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);
+        return mapper.toDto(repository.save(group), lessonsCount);
     }
 
     @Override
     public GroupDto update(GroupUpdateDto updateDto, String id) {
         Group group = validator.validateIdAndGet(id);
         mapper.mapUpdate(group, updateDto);
-        return mapper.toDto(repository.save(group));
+        Integer lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);
+        return mapper.toDto(repository.save(group), lessonsCount);
     }
 
     @Override
@@ -97,6 +104,10 @@ public class GroupService extends AbstractService<
     }
 
     public FullGroupDto getGroupInfo(String groupId) {
+        GroupDto groupDto;
+        Group group;
+        List<StudentDto> studentsByGroupId;
+        Integer lessonsCount;
         if (groupId == null) {
             String userId = userValidator.authenticateAndGetId();
             List<Group> allByTeacherId = repository.findAllByTeacherUserId(userId);
@@ -104,7 +115,7 @@ public class GroupService extends AbstractService<
                 return null;
             }
             DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
-            Group group = calculateTimeTable(dayOfWeek, allByTeacherId);
+            group = calculateTimeTable(dayOfWeek, allByTeacherId);
             if (group == null) {
                 // try tomorrow
                 group = calculateTimeTable(LocalDate.now().plusDays(1).getDayOfWeek(), allByTeacherId);
@@ -112,21 +123,21 @@ public class GroupService extends AbstractService<
             if (group == null) {
                 return null;
             }
-            GroupDto dto = mapper.toDto(group);
-            List<StudentDto> studentsByGroupId = studentService.getStudentsByGroupId(dto.id());
-            return new FullGroupDto(studentsByGroupId, dto);
+            lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);
+        } else {
+            group = validator.validateIdAndGet(groupId);
+            lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);
         }
-        Group group = validator.validateIdAndGet(groupId);
-        GroupDto dto = mapper.toDto(group);
-        List<StudentDto> studentsByGroupId = studentService.getStudentsByGroupId(group.getId());
-        return new FullGroupDto(studentsByGroupId, dto);
+        groupDto = mapper.toDto(group, lessonsCount);
+        studentsByGroupId = studentService.getStudentsByGroupId(groupDto.id());
+        return new FullGroupDto(studentsByGroupId, groupDto);
     }
 
     private Group calculateTimeTable(DayOfWeek dayOfWeek, List<Group> allByTeacherId) {
         Group nearestGroup = null;
         for (Group group : allByTeacherId) {
             TimeTable timeTable = group.getTimeTable();
-            if (Objects.equals(isOddOrEvenDayOfWeek(dayOfWeek),timeTable.getDayType())) {
+            if (Objects.equals(isOddOrEvenDayOfWeek(dayOfWeek), timeTable.getDayType())) {
                 LocalTime startTime = timeTable.getStartTime();
                 LocalTime now = LocalTime.now();
                 if (startTime.isAfter(now)) {
