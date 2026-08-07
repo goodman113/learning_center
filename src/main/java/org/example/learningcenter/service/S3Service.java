@@ -47,10 +47,12 @@ public class S3Service {
                 RequestBody.fromInputStream(file.getInputStream(), file.getSize())
         );
 
-        return getPublicUrl(key);
+        return key;
     }
 
     public String getPublicUrl(String key) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", config.getBucketName(), config.getRegion(), key);
     }
+
+    //// https://learning-center-uploads.s3.eu-north-1.amazonaws.com/https://learning-center-uploads.s3.eu-north-1.amazonaws.com/d544f322-ecc1-45f1-a7b4-54194d2de90d-java-middle-interview-prep.pdf
 }
