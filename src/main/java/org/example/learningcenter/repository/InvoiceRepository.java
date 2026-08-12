@@ -22,6 +22,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
             i.invoiceNumber as invoiceNumber,
             s.id as studentId,
             su.id as studentUserId,
+            su.imageUrl as studentImageUrl,
             su.fullName as studentFullName,
             su.phone as studentPhone,
             su.birthDate as studentBirthDate,
@@ -32,6 +33,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
             g.room as groupRoom,
             t.id as teacherId,
             tu.id as teacherUserId,
+            tu.imageUrl as teacherImageUrl,
             tu.fullName as teacherFullName,
             tu.phone as teacherPhone,
             tu.birthDate as teacherBirthDate,
@@ -40,6 +42,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
             i.issuedAt as issuedAt,
             i.paymentStatus as status,
             tt.id as timeTableId,
+            tt.dayType as timeTableDayType,
             tt.startTime as timeTableStartTime,
             tt.endTime as timeTableEndTime,
             g.status as groupStatus

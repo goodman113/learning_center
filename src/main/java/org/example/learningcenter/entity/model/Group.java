@@ -36,6 +36,9 @@ public class Group extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private GroupLevel level;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Branch branch;
+
     @Column(name = "current_month", nullable = false)
     private Integer currentMonth = 1;
 
