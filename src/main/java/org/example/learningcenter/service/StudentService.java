@@ -7,6 +7,7 @@ import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.StudentMapper;
 import org.example.learningcenter.projection.StudentProjection;
 import org.example.learningcenter.projection.StudentShowProjection;
+import org.example.learningcenter.repository.GroupRepository;
 import org.example.learningcenter.repository.StudentRepository;
 import org.example.learningcenter.validator.StudentValidator;
 import org.springframework.data.domain.Page;
@@ -21,9 +22,10 @@ public class StudentService extends AbstractService<
         StudentMapper,
         StudentValidator> implements CrudService<StudentCreateDto, StudentUpdateDto, StudentDto, String> {
 
-
-    protected StudentService(StudentRepository repository, StudentMapper mapper, StudentValidator validator) {
+    final UserService userService;
+    protected StudentService(StudentRepository repository, StudentMapper mapper, StudentValidator validator, UserService userService) {
         super(repository, mapper, validator);
+        this.userService = userService;
     }
 
     @Override

@@ -4,9 +4,11 @@ import org.example.learningcenter.entity.dto.user.UserCreateDto;
 import org.example.learningcenter.entity.dto.user.UserDto;
 import org.example.learningcenter.entity.dto.user.UserUpdateDto;
 import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.entity.model.Branch;
 import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.UserMapper;
+import org.example.learningcenter.repository.BranchRepository;
 import org.example.learningcenter.repository.UserRepository;
 import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
@@ -22,8 +24,10 @@ public class UserService extends AbstractService<
         UserMapper,
         UserValidator> implements CrudService<UserCreateDto, UserUpdateDto, UserDto,String>{
 
-    protected UserService(UserRepository repository, UserMapper mapper, UserValidator validator) {
+    final BranchRepository branchRepository;
+    protected UserService(UserRepository repository, UserMapper mapper, UserValidator validator, BranchRepository branchRepository) {
         super(repository, mapper, validator);
+        this.branchRepository = branchRepository;
     }
 
     @Override
@@ -42,6 +46,9 @@ public class UserService extends AbstractService<
     public UserDto create(UserCreateDto createDto) {
         validator.validate(createDto);
         User entity = mapper.toEntity(createDto);
+        Branch branch = branchRepository.findById(createDto.branchId())
+                .orElseThrow(() -> RestException.restThrow(ErrorType.BRANCH_NOT_FOUND));
+        entity.setBranch(branch);
         User save = repository.save(entity);
         return mapper.toDto(save);
     }

@@ -25,6 +25,8 @@ public interface StudentMapper {
 
 
     @IgnoreAuditFields
+
+    @Mapping(target = "groupId", ignore = true)
     @Mapping(source = "userCreateDto", target = "user")
     Student toEntity(StudentCreateDto studentDto);
 

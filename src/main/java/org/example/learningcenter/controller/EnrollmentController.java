@@ -44,13 +44,6 @@ public class EnrollmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEnrollment);
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<EnrollmentDto> create(
-            @Valid @RequestBody StudentCreateDto createDto,
-            @Valid @RequestBody EnrollmentCreateDto enrollment) {
-        EnrollmentDto createdEnrollment = enrollmentService.create(createDto,enrollment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEnrollment);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<EnrollmentDto> update(

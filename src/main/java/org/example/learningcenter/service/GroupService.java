@@ -81,6 +81,7 @@ public class GroupService extends AbstractService<
         String s = userValidator.authenticateAndGetId();
         User currentUser = userRepository.findByIdAndDeletedFalse(s).orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
         Group group = mapper.toEntity(createDto,currentUser.getBranch());
+
         Integer lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);
         return mapper.toDto(repository.save(group), lessonsCount);
     }
