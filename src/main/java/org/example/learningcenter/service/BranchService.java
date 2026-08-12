@@ -22,7 +22,7 @@ public class BranchService extends AbstractService<
 
     @Override
     public Page<BranchDto> getAll(Pageable pageable, String search) {
-        repository.getAllByName(search,pageable);
+
     }
 
     @Override
