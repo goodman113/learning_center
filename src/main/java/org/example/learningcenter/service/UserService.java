@@ -65,6 +65,7 @@ public class UserService extends AbstractService<
     public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user1 = (UserDetails) auth.getPrincipal();
-        return repository.findUserByPhone(user1.getUsername()).orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
+        return repository.findUserByPhone(user1.getUsername())
+                .orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
     }
 }

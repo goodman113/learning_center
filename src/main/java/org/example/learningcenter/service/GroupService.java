@@ -4,9 +4,12 @@ import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.enums.DayType;
+import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.TimeTable;
+import org.example.learningcenter.entity.model.User;
+import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.projection.GroupNameProjection;
 import org.example.learningcenter.projection.GroupProjection;
 import org.example.learningcenter.entity.dto.group.GroupDto;
@@ -16,6 +19,7 @@ import org.example.learningcenter.entity.model.Group;
 import org.example.learningcenter.mapper.GroupMapper;
 import org.example.learningcenter.repository.GroupRepository;
 import org.example.learningcenter.repository.LessonRepository;
+import org.example.learningcenter.repository.UserRepository;
 import org.example.learningcenter.validator.GroupValidator;
 import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
@@ -39,12 +43,14 @@ public class GroupService extends AbstractService<
     private final UserValidator userValidator;
     private final StudentService studentService;
     private final LessonRepository lessonRepository;
+    final UserRepository userRepository;
 
-    protected GroupService(GroupRepository repository, GroupMapper mapper, GroupValidator validator, UserValidator userValidator, StudentService studentService, LessonRepository lessonRepository) {
+    protected GroupService(GroupRepository repository, GroupMapper mapper, GroupValidator validator, UserValidator userValidator, StudentService studentService, LessonRepository lessonRepository, UserRepository userRepository) {
         super(repository, mapper, validator);
         this.userValidator = userValidator;
         this.studentService = studentService;
         this.lessonRepository = lessonRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -72,7 +78,9 @@ public class GroupService extends AbstractService<
     @Override
     public GroupDto create(GroupCreateDto createDto) {
         validator.createValid(createDto);
-        Group group = mapper.toEntity(createDto);
+        String s = userValidator.authenticateAndGetId();
+        User currentUser = userRepository.findByIdAndDeletedFalse(s).orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
+        Group group = mapper.toEntity(createDto,currentUser.getBranch());
         Integer lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);
         return mapper.toDto(repository.save(group), lessonsCount);
     }

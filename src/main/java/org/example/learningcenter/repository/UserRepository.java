@@ -3,6 +3,7 @@ package org.example.learningcenter.repository;
 import org.example.learningcenter.entity.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,4 +29,15 @@ public interface UserRepository extends JpaRepository<User, String> {
         from User u where u.phone = :username
 """)
     Optional<User> findUserByPhone(String username);
+
+
+    @Query("""
+        select u
+        from User u
+         left join fetch u.branch
+         where u.id = :s
+         and u.deleted = false
+""")
+    Optional<User> findByIdAndDeletedFalse(String s);
+
 }

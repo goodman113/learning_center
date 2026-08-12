@@ -34,4 +34,7 @@ public class User extends BaseEntity {
     private Role role;
 
     private LocalDate birthDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Branch branch;
 }

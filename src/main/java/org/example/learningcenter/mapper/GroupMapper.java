@@ -3,6 +3,7 @@ package org.example.learningcenter.mapper;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
+import org.example.learningcenter.entity.model.Branch;
 import org.example.learningcenter.projection.GroupProjection;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupDto;
@@ -22,7 +23,7 @@ public class GroupMapper {
     final TeacherMapper teacherMapper;
     final TimeTableMapper timeTableMapper;
 
-    public Group toEntity(GroupCreateDto createDto) {
+    public Group toEntity(GroupCreateDto createDto, Branch branch) {
         return new Group(
                 createDto.name(),
                 createDto.room(),
@@ -30,6 +31,7 @@ public class GroupMapper {
                 timeTableRepository.save(timeTableMapper.toEntity(createDto.timeTable())),
                 GroupStatus.STARTING,
                 GroupLevel.A1,
+                branch,
                 1
 
         );

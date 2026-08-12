@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.example.learningcenter.entity.base.BaseEntity;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "students")
 @Getter
@@ -24,4 +26,7 @@ public class Student extends BaseEntity {
     @OneToOne(optional = false,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
     private User user;
+
+    private BigDecimal balance;
+
 }
