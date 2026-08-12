@@ -9,19 +9,15 @@ import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.dto.teacher.TeacherDto;
 import org.example.learningcenter.entity.dto.timeTable.TimeTableDto;
 import org.example.learningcenter.entity.dto.user.UserDto;
-import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.enums.InvoiceStatus;
 import org.example.learningcenter.entity.model.Invoice;
 import org.example.learningcenter.entity.model.Student;
-import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.projection.InvoiceProjection;
-import org.example.learningcenter.repository.StudentRepository;
 import org.example.learningcenter.service.InvoiceNumberService;
 import org.example.learningcenter.validator.StudentValidator;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

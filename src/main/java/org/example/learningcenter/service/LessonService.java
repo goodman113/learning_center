@@ -5,8 +5,6 @@ import org.example.learningcenter.entity.dto.lesson.LessonCreateDto;
 import org.example.learningcenter.entity.dto.lesson.LessonDto;
 import org.example.learningcenter.entity.dto.lesson.LessonUpdateDto;
 import org.example.learningcenter.entity.enums.ErrorType;
-import org.example.learningcenter.entity.enums.GroupLevel;
-import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.Group;
 import org.example.learningcenter.entity.model.Lesson;
 import org.example.learningcenter.exceptions.RestException;
