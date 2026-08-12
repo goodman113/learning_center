@@ -22,8 +22,6 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private Role role;
     private String userId;
-    private String teacherId;
-    private String studentId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
