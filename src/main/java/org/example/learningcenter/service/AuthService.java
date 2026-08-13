@@ -8,8 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.config.JwtUtils;
 import org.example.learningcenter.entity.dto.user.UserDto;
-import org.example.learningcenter.exceptions.ErrorCodes;
-import org.example.learningcenter.exceptions.ErrorType;
+import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.login.LoginRequest;
 import org.example.learningcenter.entity.login.LoginResponse;
 import org.example.learningcenter.entity.login.TokenDto;
@@ -105,7 +104,7 @@ public class AuthService {
                 .secure(true)
                 .path("/")
                 .maxAge(refreshTokenExpiration)
-                .sameSite("None");
+                .sameSite("Lax");
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookieBuilder.build().toString());
     }

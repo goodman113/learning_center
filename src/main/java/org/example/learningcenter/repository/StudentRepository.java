@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("""
@@ -49,4 +50,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
     @Query("select s from Student s where s.user.phone like :phone and s.deleted = false")
     List<Student> getStudentByPhone(@Param("phone") String phone);
+
+    @Query("select exists (select s.id from Student s where s.id =:id)")
+    Optional<Boolean> checkId(@Param("id") String id);
 }

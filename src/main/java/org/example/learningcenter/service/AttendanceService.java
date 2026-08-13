@@ -10,6 +10,7 @@ import org.example.learningcenter.entity.model.AttendanceStudent;
 import org.example.learningcenter.entity.model.Lesson;
 import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.AttendanceMapper;
+import org.example.learningcenter.projection.AttendanceProjection;
 import org.example.learningcenter.repository.AttendanceRepository;
 import org.example.learningcenter.validator.AttendanceValidator;
 import org.example.learningcenter.validator.LessonValidator;
@@ -115,5 +116,11 @@ public class AttendanceService extends AbstractService<
     public Integer getCount() {
         Optional<Integer> count = repository.getCount();
         return count.orElse(0);
+    }
+
+    public AttendanceDto getByStudentId(String studentId) {
+        studentValidator.validateId(studentId);
+        List<AttendanceProjection> byStudentId = repository.getByStudentId(studentId);
+        return null;
     }
 }

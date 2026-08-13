@@ -39,6 +39,12 @@ public class AttendanceController {
         return ResponseEntity.ok(attendance);
     }
 
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<AttendanceDto> getByStudentId(@PathVariable String studentId) {
+        AttendanceDto attendance = service.getByStudentId(studentId);
+        return ResponseEntity.ok(attendance);
+    }
+
     @GetMapping("/count")
     public ResponseEntity<Integer> getCount(){
         Integer count = service.getCount();

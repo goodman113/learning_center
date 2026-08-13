@@ -20,6 +20,13 @@ public class StudentValidator {
                 .orElseThrow(()-> new RestException(ErrorType.STUDENT_NOT_FOUND, ErrorCodes.NotFound));
     }
 
+    public void validateId(String id) {
+        Boolean exists = repository.checkId(id).orElse(false);
+        if (!exists){
+            throw RestException.restThrow(ErrorType.STUDENT_NOT_FOUND);
+        }
+    }
+
     public void validate(StudentCreateDto createDto) {
 
     }

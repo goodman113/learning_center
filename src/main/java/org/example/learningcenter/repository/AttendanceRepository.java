@@ -2,6 +2,7 @@ package org.example.learningcenter.repository;
 
 import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.model.Attendance;
+import org.example.learningcenter.projection.AttendanceProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -34,4 +36,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, String> 
 
     @Query("select count(a.id) from Attendance a where a.deleted = false")
     Optional<Integer> getCount();
+
+    @Query("""
+            select a.id as id,
+                   a.createdAt as date
+                   from AttendanceStudent a_s join a_s.attendance a
+                   where a_s.student.id=:studentId
+            """)
+    List<AttendanceProjection> getByStudentId(@Param("studentId") String studentId);
 }

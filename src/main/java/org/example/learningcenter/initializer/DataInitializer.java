@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.enums.*;
 import org.example.learningcenter.entity.model.*;
 import org.example.learningcenter.repository.*;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor ////implements CommandLineRunner
@@ -242,7 +240,6 @@ public class DataInitializer{
         Attendance attendance1 = new Attendance();
         attendance1.setLesson(lesson1);
         attendance1.addStudentAttendance(createAttendanceStudent(student1, AttendanceStatus.PRESENT));
-        attendance1.addStudentAttendance(createAttendanceStudent(student2, AttendanceStatus.LATE));
         attendanceRepository.save(attendance1);
 
         Attendance attendance2 = new Attendance();

@@ -35,7 +35,7 @@ public interface GroupRepository extends JpaRepository<Group, String> {
                 LEFT JOIN Lesson l ON l.group = g and l.level=:level
                 WHERE (:status IS NULL OR g.status = :status)
                   AND (:level IS NULL OR g.level = :level)
-                  AND (:search IS NULL 
+                  AND (:search IS NULL
                        OR g.name ILIKE CONCAT('%', CAST(:search AS string), '%')
                        OR g.room ILIKE CONCAT('%', CAST(:search AS string), '%')
                        OR (g.teacher IS NOT NULL AND g.teacher.user.fullName ILIKE CONCAT('%', CAST(:search AS string), '%')))
@@ -60,7 +60,7 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     Optional<Integer> getCount();
 
     @Query("""
-            SELECT g.id as id, g.name as name
+            SELECT g.id as id, g.name as name, g.timeTable.dayType as dayType
             from Group g
             left join g.teacher t
             left join t.user u
