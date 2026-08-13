@@ -8,7 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.config.JwtUtils;
 import org.example.learningcenter.entity.dto.user.UserDto;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.login.LoginRequest;
 import org.example.learningcenter.entity.login.LoginResponse;
 import org.example.learningcenter.entity.login.TokenDto;
@@ -24,9 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -50,10 +49,10 @@ public class AuthService {
         String phone = request.getPhone();
 
         User user = userRepository.findByPhoneAndDeletedFalse(phone)
-                .orElseThrow(() -> RestException.restThrow(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD));
+                .orElseThrow(() ->new RestException(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD,ErrorCodes.BadRequest));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw RestException.restThrow(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD);
+            throw new RestException(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD, ErrorCodes.BadRequest);
         }
 
         Map<String, Object> claims = jwtUtils.prepareClaims(user);
@@ -72,20 +71,20 @@ public class AuthService {
 
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            throw RestException.restThrow(ErrorType.REFRESH_TOKEN_NOT_FOUND);
+            throw new RestException(ErrorType.REFRESH_TOKEN_NOT_FOUND, ErrorCodes.NotFound);
         }
 
         String oldRefreshToken = Arrays.stream(cookies)
                 .filter(c -> c.getName().equals("refresh_token"))
                 .map(Cookie::getValue)
                 .findFirst()
-                .orElseThrow(() -> RestException.restThrow(ErrorType.REFRESH_TOKEN_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorType.REFRESH_TOKEN_NOT_FOUND, ErrorCodes.NotFound));
 
         Claims claims = jwtUtils.extractClaimsIgnoreExpiry(oldRefreshToken);
         String phone = claims.getSubject();
 
         User user = userRepository.findByPhone(phone)
-                .orElseThrow(() -> RestException.restThrow(ErrorType.PHONE_NUMBER_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorType.PHONE_NUMBER_NOT_FOUND, ErrorCodes.NotFound));
 
         TokenDto access = jwtUtils.generateToken(phone, jwtUtils.prepareClaims(user), "access");
 
@@ -114,11 +113,11 @@ public class AuthService {
     public String changePassword(@Valid ChangePasswordRequest request, User user) {
 
         if (request.confirmPassword().equals(request.newPassword())) {
-            throw RestException.restThrow(ErrorType.PASSWORDS_DO_NOT_MATCH);
+            throw new RestException(ErrorType.PASSWORDS_DO_NOT_MATCH, ErrorCodes.BadRequest);
         }
 
         if (!passwordEncoder.matches(request.oldPassword(), user.getPassword())) {
-            throw RestException.restThrow(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD);
+            throw new RestException(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD, ErrorCodes.BadRequest);
         }
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));

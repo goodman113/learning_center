@@ -11,7 +11,6 @@ public record InvoiceDto(
         String id,
         String invoiceNumber,
         StudentDto student,
-        GroupDto group,
         BigDecimal amount,
         LocalDateTime issuedAt,
         InvoiceStatus status

@@ -5,23 +5,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.annotation.CurrentUser;
-import org.example.learningcenter.config.JwtUtils;
 import org.example.learningcenter.entity.dto.user.UserDto;
-import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.login.LoginRequest;
 import org.example.learningcenter.entity.login.LoginResponse;
-import org.example.learningcenter.entity.login.TokenDto;
 import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.entity.request.ChangePasswordRequest;
-import org.example.learningcenter.exceptions.RestException;
-import org.example.learningcenter.repository.UserRepository;
 import org.example.learningcenter.service.AuthService;
-import org.jspecify.annotations.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/auth")

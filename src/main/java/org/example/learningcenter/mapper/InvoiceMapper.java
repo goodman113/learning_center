@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 public class InvoiceMapper {
     final StudentMapper studentMapper;
     final InvoiceNumberService invoiceNumberService;
-    final GroupMapper  groupMapper;
     private final StudentValidator studentValidator;
 
     public Invoice toEntity(InvoiceCreateDto createDto) {
@@ -44,7 +43,6 @@ public class InvoiceMapper {
                 invoice.getId(),
                 invoice.getInvoiceNumber(),
                 studentMapper.toDto(invoice.getStudent()),
-                groupMapper.toDto(invoice.getStudent().getGroup(),0),
                 invoice.getAmount(),
                 invoice.getIssuedAt(),
                 invoice.getPaymentStatus()
@@ -59,39 +57,13 @@ public class InvoiceMapper {
                         projection.getStudentId(),
                         new UserDto(
                                 projection.getStudentUserId(),
-                                projection.getStudentFullName(),
                                 projection.getStudentImageUrl(),
+                                projection.getStudentFullName(),
                                 projection.getStudentPhone(),
                                 projection.getStudentBirthDate(),
                                 projection.getStudentRole()
                         ),
                         projection.getParentPhone()
-                ),
-                new GroupDto(
-                        projection.getGroupId(),
-                        projection.getGroupName(),
-                        projection.getGroupRoom(),
-                        new TeacherDto(
-                                projection.getTeacherId(),
-                                new UserDto(
-                                projection.getTeacherUserId(),
-                                projection.getTeacherImageUrl(),
-                                projection.getTeacherFullName(),
-                                projection.getTeacherPhone(),
-                                projection.getTeacherBirthDate(),
-                                projection.getTeacherRole()
-                            )
-                        ),
-                        new TimeTableDto(
-                                projection.getTimeTableId(),
-                                projection.getTimeTableDayType(),
-                                projection.getTimeTableStartTime(),
-                                projection.getTimeTableEndTime()
-                        ),
-                        projection.getGroupStatus(),
-                        projection.getGroupLevel(),
-                        projection.getCurrentMonth(),
-                        0
                 ),
                 projection.getAmount(),
                 projection.getIssuedAt(),

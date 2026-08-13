@@ -4,7 +4,8 @@ import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.dto.group.FullGroupDto;
 import org.example.learningcenter.entity.dto.student.StudentDto;
 import org.example.learningcenter.entity.enums.DayType;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.TimeTable;
@@ -79,7 +80,7 @@ public class GroupService extends AbstractService<
     public GroupDto create(GroupCreateDto createDto) {
         validator.createValid(createDto);
         String s = userValidator.authenticateAndGetId();
-        User currentUser = userRepository.findByIdAndDeletedFalse(s).orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
+        User currentUser = userRepository.findByIdAndDeletedFalse(s).orElseThrow(() -> new RestException(ErrorType.USER_NOT_FOUND, ErrorCodes.NotFound));
         Group group = mapper.toEntity(createDto,currentUser.getBranch());
 
         Integer lessonsCount = lessonRepository.findLessonCountByGroupId(group.getId(), group.getLevel()).orElse(0);

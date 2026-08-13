@@ -26,7 +26,8 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("""
         select s
         from Student s
-        join Group g on s.group.id = g.id and g.status = 'ONGOING'
+        join Enrollment e on s.id = e.student.id
+        join Group g on e.group.id = g.id and g.status = 'ONGOING'
         join Lesson l on l.group.id = g.id and l.isCompleted = true
          where s.deleted = false
         group by s
@@ -40,7 +41,8 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("""
         select s
         from Student s
-        where s.group.id = :groupId
+        join Enrollment e on s.id = e.student.id
+        where e.group.id = :groupId
         and s.deleted = false
 """)
     List<StudentProjection> getStudentByGroupId(String groupId);

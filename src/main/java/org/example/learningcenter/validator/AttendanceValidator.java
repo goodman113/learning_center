@@ -1,7 +1,8 @@
 package org.example.learningcenter.validator;
 
 import lombok.RequiredArgsConstructor;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.Attendance;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.AttendanceRepository;
@@ -14,14 +15,14 @@ public class AttendanceValidator {
 
     public Attendance validateIdAndGet(String id) {
        return repository.findById(id)
-                .orElseThrow(()->new RestException(ErrorType.ATTENDANCE_NOT_FOUND));
+                .orElseThrow(()->new RestException(ErrorType.ATTENDANCE_NOT_FOUND, ErrorCodes.NotFound));
 
     }
 
     public void validateId(String id) {
         Boolean exists = repository.checkId(id).orElse(false);
         if (!exists){
-            throw RestException.restThrow(ErrorType.ATTENDANCE_NOT_FOUND);
+            throw new RestException(ErrorType.ATTENDANCE_NOT_FOUND, ErrorCodes.NotFound);
         }
     }
 

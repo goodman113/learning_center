@@ -49,7 +49,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, String> {
         from Invoice i
         join i.student s
         join s.user su
-        left join s.group g
+        left join Enrollment e on s.id = e.student.id
+        left join Group g on e.group.id = g.id
         left join g.teacher t
         left join t.user tu
         left join g.timeTable tt

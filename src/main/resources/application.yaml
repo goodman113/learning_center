@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/learning_center
     username: postgres
-    password: root1234
+    password: root123
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

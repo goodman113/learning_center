@@ -6,10 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.enums.Role;
-import org.example.learningcenter.entity.model.User;
-import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -62,8 +59,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 .phone(claims.getSubject())
                 .userId(claims.get("userId", String.class))
                 .role(Role.valueOf(claims.get("role", String.class)))
-                .teacherId(claims.get("teacherId", String.class))
-                .studentId(claims.get("studentId", String.class))
                 .build();
     }
 }

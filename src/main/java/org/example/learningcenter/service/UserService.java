@@ -3,7 +3,8 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.user.UserCreateDto;
 import org.example.learningcenter.entity.dto.user.UserDto;
 import org.example.learningcenter.entity.dto.user.UserUpdateDto;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.Branch;
 import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.exceptions.RestException;
@@ -47,7 +48,7 @@ public class UserService extends AbstractService<
         validator.validate(createDto);
         User entity = mapper.toEntity(createDto);
         Branch branch = branchRepository.findById(createDto.branchId())
-                .orElseThrow(() -> RestException.restThrow(ErrorType.BRANCH_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorType.BRANCH_NOT_FOUND, ErrorCodes.NotFound));
         entity.setBranch(branch);
         User save = repository.save(entity);
         return mapper.toDto(save);
@@ -73,6 +74,6 @@ public class UserService extends AbstractService<
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails user1 = (UserDetails) auth.getPrincipal();
         return repository.findUserByPhone(user1.getUsername())
-                .orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorType.USER_NOT_FOUND, ErrorCodes.NotFound));
     }
 }
