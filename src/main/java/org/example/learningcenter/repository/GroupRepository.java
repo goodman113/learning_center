@@ -60,7 +60,7 @@ public interface GroupRepository extends JpaRepository<Group, String> {
     Optional<Integer> getCount();
 
     @Query("""
-            SELECT g.id as id, g.name as name
+            SELECT g.id as id, g.name as name, g.timeTable.dayType as dayType
             from Group g
             left join g.teacher t
             left join t.user u

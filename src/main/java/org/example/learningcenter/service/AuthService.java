@@ -106,14 +106,14 @@ public class AuthService {
                 .secure(true)
                 .path("/")
                 .maxAge(refreshTokenExpiration)
-                .sameSite("None");
+                .sameSite("Lax");
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookieBuilder.build().toString());
     }
 
     public String changePassword(@Valid ChangePasswordRequest request, User user) {
 
-        if (request.confirmPassword().equals(request.newPassword())) {
+        if (!request.confirmPassword().equals(request.newPassword())) {
             throw RestException.restThrow(ErrorType.PASSWORDS_DO_NOT_MATCH);
         }
 
