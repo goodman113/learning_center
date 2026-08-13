@@ -137,25 +137,21 @@ public class DataInitializer{
         // ============ STUDENTS ============
         Student student1 = new Student();
         student1.setUser(studentUser1);
-        student1.setGroup(group1);
         student1.setParentPhone("+998901234580");
         studentRepository.save(student1);
 
         Student student2 = new Student();
         student2.setUser(studentUser2);
-        student2.setGroup(group1);
         student2.setParentPhone("+998901234581");
         studentRepository.save(student2);
 
         Student student3 = new Student();
         student3.setUser(studentUser3);
-        student3.setGroup(group2);
         student3.setParentPhone("+998901234582");
         studentRepository.save(student3);
 
         Student student4 = new Student();
         student4.setUser(studentUser4);
-        student4.setGroup(group2);
         student4.setParentPhone("+998901234583");
         studentRepository.save(student4);
 
@@ -246,7 +242,6 @@ public class DataInitializer{
         Attendance attendance1 = new Attendance();
         attendance1.setLesson(lesson1);
         attendance1.addStudentAttendance(createAttendanceStudent(student1, AttendanceStatus.PRESENT));
-        attendance1.addStudentAttendance(createAttendanceStudent(student2, AttendanceStatus.LATE));
         attendanceRepository.save(attendance1);
 
         Attendance attendance2 = new Attendance();
