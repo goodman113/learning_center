@@ -62,8 +62,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 .phone(claims.getSubject())
                 .userId(claims.get("userId", String.class))
                 .role(Role.valueOf(claims.get("role", String.class)))
-                .teacherId(claims.get("teacherId", String.class))
-                .studentId(claims.get("studentId", String.class))
                 .build();
     }
 }
