@@ -3,8 +3,9 @@ package org.example.learningcenter.validator;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.dto.organization.OrganizationCreateDto;
 import org.example.learningcenter.entity.dto.organization.OrganizationUpdateDto;
-import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.model.Organization;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.OrganizationRepository;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class OrganizationValidator {
 
     public Organization validateAndGetId(String id) {
         return repository.findById(id)
-                .orElseThrow(() -> RestException.restThrow(ErrorType.ORGANIZATION_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorType.ORGANIZATION_NOT_FOUND, ErrorCodes.NotFound));
     }
 
     public void validate(OrganizationCreateDto createDto) {

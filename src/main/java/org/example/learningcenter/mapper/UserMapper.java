@@ -24,6 +24,7 @@ public abstract class UserMapper {
     @IgnoreAuditFields
     @Mapping(target = "password", expression = "java(generator.generatePassword())")
     @Mapping(target = "branch", ignore = true)
+    @Mapping(target = "organization", ignore = true)
     public abstract User toEntity(UserCreateDto createDto);
 
     @IgnoreAuditFields

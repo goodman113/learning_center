@@ -3,6 +3,7 @@ package org.example.learningcenter.service;
 import org.example.learningcenter.entity.dto.user.UserCreateDto;
 import org.example.learningcenter.entity.dto.user.UserDto;
 import org.example.learningcenter.entity.dto.user.UserUpdateDto;
+import org.example.learningcenter.entity.model.Organization;
 import org.example.learningcenter.exceptions.ErrorCodes;
 import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.Branch;
@@ -10,7 +11,10 @@ import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.UserMapper;
 import org.example.learningcenter.repository.BranchRepository;
+import org.example.learningcenter.repository.OrganizationRepository;
 import org.example.learningcenter.repository.UserRepository;
+import org.example.learningcenter.validator.BranchValidator;
+import org.example.learningcenter.validator.OrganizationValidator;
 import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +30,13 @@ public class UserService extends AbstractService<
         UserValidator> implements CrudService<UserCreateDto, UserUpdateDto, UserDto,String>{
 
     final BranchRepository branchRepository;
-    protected UserService(UserRepository repository, UserMapper mapper, UserValidator validator, BranchRepository branchRepository) {
+    final BranchValidator branchValidator;
+    final OrganizationValidator organizationValidator;
+    protected UserService(UserRepository repository, UserMapper mapper, UserValidator validator, BranchRepository branchRepository, BranchValidator branchValidator, OrganizationValidator organizationValidator) {
         super(repository, mapper, validator);
         this.branchRepository = branchRepository;
+        this.branchValidator = branchValidator;
+        this.organizationValidator = organizationValidator;
     }
 
     @Override
@@ -47,9 +55,10 @@ public class UserService extends AbstractService<
     public UserDto create(UserCreateDto createDto) {
         validator.validate(createDto);
         User entity = mapper.toEntity(createDto);
-        Branch branch = branchRepository.findById(createDto.branchId())
-                .orElseThrow(() -> new RestException(ErrorType.BRANCH_NOT_FOUND, ErrorCodes.NotFound));
+        Branch branch = branchValidator.validateIdAndGet(createDto.branchId());
+        Organization organization = organizationValidator.validateAndGetId(createDto.organizationId());
         entity.setBranch(branch);
+        entity.setOrganization(organization);
         User save = repository.save(entity);
         return mapper.toDto(save);
     }

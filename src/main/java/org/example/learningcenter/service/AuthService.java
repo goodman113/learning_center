@@ -8,12 +8,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.config.JwtUtils;
 import org.example.learningcenter.entity.dto.user.UserDto;
-import org.example.learningcenter.entity.enums.ErrorType;
 import org.example.learningcenter.entity.login.LoginRequest;
 import org.example.learningcenter.entity.login.LoginResponse;
 import org.example.learningcenter.entity.login.TokenDto;
 import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.entity.request.ChangePasswordRequest;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.UserMapper;
 import org.example.learningcenter.repository.UserRepository;
@@ -48,7 +49,7 @@ public class AuthService {
         String phone = request.getPhone();
 
         User user = userRepository.findByPhoneAndDeletedFalse(phone)
-                .orElseThrow(() ->new RestException(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD,ErrorCodes.BadRequest));
+                .orElseThrow(() ->new RestException(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD, ErrorCodes.BadRequest));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RestException(ErrorType.INVALID_PHONE_NUMBER_OR_PASSWORD, ErrorCodes.BadRequest);

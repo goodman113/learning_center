@@ -46,7 +46,6 @@ public class OrganizationService extends AbstractService<
         validator.validate(createDto);
         Organization entity = mapper.toEntity(createDto);
         OrganizationDto dto = mapper.toDto(repository.save(entity));
-        userService.create(new UserCreateDto(generator.generateSuperAdminName(createDto.name()),null,null, Role.SUPER_ADMIN));
         return dto;
     }
 
