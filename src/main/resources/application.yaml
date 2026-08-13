@@ -2,15 +2,14 @@ spring:
   application:
     name: learningCenter
     frontUrl: http://localhost:5173
-    invoiceAmount: 1000000
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: ${MAX-FILE-SIZE:10MB}
+      max-request-size: ${MAX-REQUEST-SIZE:10MB}
   datasource:
-    url: jdbc:postgresql://localhost:5432/learning_center
-    username: postgres
-    password: root1234
+    url: ${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -25,21 +24,21 @@ aws:
   s3:
     bucket: learning-center-uploads
     region: eu-north-1
-    access-key: AKIA5SE3DSUARHE423RL
-    secret-key: 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
+    access-key: ${AWS-ACCESS-KEY}
+    secret-key: ${AWS-SECRET-KEY}
 
 
 jwt:
   access:
     token:
-      secretKey: 4f6162315a6b324d6731336c56417a426e4d3538426a76386d4e7751525a334e
+      secretKey: ${JWT-ACCESS-SECRET-KEY}
       expire:
-        date: 900000
+        date: 900
   refresh:
     token:
-      secretKey: 62354b526d4c6d645161394a46587042594a574768344d5a71314e3658564232
+      secretKey: ${JWT-REFRESH-SECRET-KEY}
       expire:
-        date: 604800000
+        date: 604800
 
 springdoc:
   swagger-ui:
