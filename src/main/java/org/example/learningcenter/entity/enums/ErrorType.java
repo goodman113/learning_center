@@ -10,10 +10,11 @@ public enum ErrorType {
     ERROR_SAVING_FILE("error.saving.file", HttpStatus.INTERNAL_SERVER_ERROR),
     BAD_JSON("bad.json", HttpStatus.BAD_REQUEST),
     PAGE_NOT_FOUND("page.not.found", HttpStatus.NOT_FOUND),
+    ORGANIZATION_NOT_FOUND("organization.not.found", HttpStatus.NOT_FOUND),
     USER_NOT_FOUND("user.not.found", HttpStatus.NOT_FOUND),
     LESSON_NOT_FOUND("lesson,not.found", HttpStatus.NOT_FOUND),
-    ENROLLMENT_NOT_FOUND("enrollment.not.found",HttpStatus.NOT_FOUND),
-    ATTENDANCE_NOT_FOUND("attendance.not.found",HttpStatus.NOT_FOUND),
+    ENROLLMENT_NOT_FOUND("enrollment.not.found", HttpStatus.NOT_FOUND),
+    ATTENDANCE_NOT_FOUND("attendance.not.found", HttpStatus.NOT_FOUND),
     UNSUPPORTED_MEDIA_TYPE("unsupported.media.type", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
     METHOD_NOT_ALLOWED("method.not.allowed", HttpStatus.METHOD_NOT_ALLOWED),
     MISSING_PARAMETER("missing.parameter", HttpStatus.BAD_REQUEST),
@@ -33,7 +34,7 @@ public enum ErrorType {
     REFRESH_TOKEN_NOT_FOUND("refresh.token.not.found", HttpStatus.NOT_FOUND),
     TEST_NOT_FOUND("test.not.found", HttpStatus.NOT_FOUND),
     ATTACHMENT_NOT_FOUND("attachment.not.found", HttpStatus.NOT_FOUND),
-    REFRESH_TOKEN_EXPIRED("refresh.token.expired", HttpStatus.BAD_REQUEST ),
+    REFRESH_TOKEN_EXPIRED("refresh.token.expired", HttpStatus.BAD_REQUEST),
     GROUP_ALREADY_EXISTS_WITH_THIS_NAME("group.already.exists.with.this.name", HttpStatus.BAD_REQUEST),
     TEACHER_NOT_FOUND("teacher.not.found", HttpStatus.NOT_FOUND),
     TIMETABLE_NOT_FOUND("timetable.not.found", HttpStatus.NOT_FOUND),
@@ -61,4 +62,4 @@ public enum ErrorType {
     public int getStatusValue() {
         return status.value();
     }
-}
+    }

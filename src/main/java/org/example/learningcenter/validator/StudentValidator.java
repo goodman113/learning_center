@@ -19,6 +19,13 @@ public class StudentValidator {
                 .orElseThrow(()-> RestException.restThrow(ErrorType.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
     }
 
+    public void validateId(String id) {
+        Boolean exists = repository.checkId(id).orElse(false);
+        if (!exists){
+            throw RestException.restThrow(ErrorType.STUDENT_NOT_FOUND);
+        }
+    }
+
     public void validate(StudentCreateDto createDto) {
 
     }
