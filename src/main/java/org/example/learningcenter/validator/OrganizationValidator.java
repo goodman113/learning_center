@@ -17,7 +17,7 @@ public class OrganizationValidator {
 
     public Organization validateAndGetId(String id) {
         return repository.findById(id)
-                .orElseThrow((() -> RestException.restThrow(ErrorType.ORGANIZATION_NOT_FOUND));
+                .orElseThrow(() -> RestException.restThrow(ErrorType.ORGANIZATION_NOT_FOUND));
     }
 
     public void validate(OrganizationCreateDto createDto) {
