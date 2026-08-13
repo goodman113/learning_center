@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.enums.GroupLevel;
 import org.example.learningcenter.entity.enums.GroupStatus;
 import org.example.learningcenter.entity.model.Branch;
+import org.example.learningcenter.exceptions.ErrorCodes;
 import org.example.learningcenter.projection.GroupProjection;
 import org.example.learningcenter.entity.dto.group.GroupCreateDto;
 import org.example.learningcenter.entity.dto.group.GroupDto;
 import org.example.learningcenter.entity.dto.group.GroupUpdateDto;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.Group;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.TeacherRepository;
@@ -27,7 +28,7 @@ public class GroupMapper {
         return new Group(
                 createDto.name(),
                 createDto.room(),
-                teacherRepository.findById(createDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)),
+                teacherRepository.findById(createDto.teacherId()).orElseThrow(() -> new RestException(ErrorType.TEACHER_NOT_FOUND, ErrorCodes.NotFound)),
                 timeTableRepository.save(timeTableMapper.toEntity(createDto.timeTable())),
                 GroupStatus.STARTING,
                 GroupLevel.A1,
@@ -67,7 +68,7 @@ public class GroupMapper {
 
     public void mapUpdate(Group group, GroupUpdateDto updateDto) {
         if (updateDto.teacherId() != null)
-            group.setTeacher(teacherRepository.findById(updateDto.teacherId()).orElseThrow(() -> RestException.restThrow(ErrorType.TEACHER_NOT_FOUND)));
+            group.setTeacher(teacherRepository.findById(updateDto.teacherId()).orElseThrow(() -> new RestException(ErrorType.TEACHER_NOT_FOUND, ErrorCodes.NotFound)));
         timeTableMapper.update(group.getTimeTable(), updateDto.timeTable());
         timeTableRepository.save(group.getTimeTable());
     }

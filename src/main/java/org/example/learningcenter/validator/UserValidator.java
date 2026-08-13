@@ -3,7 +3,8 @@ package org.example.learningcenter.validator;
 import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.config.CustomUserDetails;
 import org.example.learningcenter.entity.dto.user.UserCreateDto;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.UserRepository;
@@ -20,7 +21,7 @@ public class UserValidator {
 
     public User validateIdAndGet(String id) {
         return repository.findById(id)
-                .orElseThrow(() -> RestException.restThrow(ErrorType.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorType.USER_NOT_FOUND, ErrorCodes.NotFound));
     }
 
     public void validate(UserCreateDto createDto) {
@@ -34,6 +35,6 @@ public class UserValidator {
             assert principal != null;
             return principal.getUserId();
         }
-        throw RestException.restThrow(ErrorType.UNAUTHORIZED);
+        throw new RestException(ErrorType.UNAUTHORIZED, ErrorCodes.Unauthorized);
     }
 }

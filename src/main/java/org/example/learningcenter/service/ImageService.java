@@ -4,7 +4,8 @@ import jakarta.validation.Valid;
 import org.example.learningcenter.entity.dto.image.ImageCreateDto;
 import org.example.learningcenter.entity.dto.image.ImageDto;
 import org.example.learningcenter.entity.dto.image.ImageUpdateDto;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.Image;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.ImageMapper;
@@ -67,7 +68,7 @@ public class ImageService extends AbstractService<
         boolean validContentType = "application/pdf".equals(file.getContentType());
 
         if (!validExtension || !validContentType) {
-            throw RestException.restThrow(ErrorType.INVALID_FILE_TYPE);
+            throw new RestException(ErrorType.INVALID_FILE_TYPE, ErrorCodes.BadRequest);
         }
         Image image = new Image();
         image.setOriginalFileName(filename);

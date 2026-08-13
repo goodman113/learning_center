@@ -1,37 +1,42 @@
 package org.example.learningcenter.exceptions;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.example.learningcenter.entity.enums.ErrorType;
-import org.springframework.http.HttpStatus;
-
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class RestException extends RuntimeException {
 
-    private HttpStatus status;
-    private final ErrorType errorType;
+    private ErrorType type;
+    private ErrorCodes errorCode;
+    private Object[] args;
+    private String message;
+    private int statusCode;
 
-
-    public RestException( ErrorType errorType) {
-        this.errorType = errorType;
-        this.status = errorType.getStatus();
+    public RestException(ErrorType type, ErrorCodes errorCode, Object... args) {
+        super(type != null ? type.getKey() : null); // important: sets RuntimeException message
+        this.type = type;
+        this.errorCode = errorCode;
+        this.args = args == null ? new Object[0] : args;
+        this.message = (type != null ? type.getKey() : null);
     }
 
-    private RestException( ErrorType errorType, HttpStatus status) {
-        this.errorType = errorType;
-        this.status = status;
+    public RestException(String message, ErrorCodes codes) {
+        super(message);
+        this.message = message;
+        this.errorCode = codes;
+        this.args = new Object[0];
     }
 
-    public static RestException restThrow( ErrorType errorType) {
-        return new RestException(errorType);
+    public RestException(String message, ErrorCodes codes, Object... args) {
+        super(message);
+        this.message = message;
+        this.errorCode = codes;
+        this.args = args == null ? new Object[0] : args;
     }
 
-    public static RestException restThrow( ErrorType errorType, HttpStatus status) {
-        return new RestException(errorType, status);
+    public RestException(String errMsg, int statusCode){
+        this.message = errMsg;
+        this.statusCode = statusCode;
     }
-
 }

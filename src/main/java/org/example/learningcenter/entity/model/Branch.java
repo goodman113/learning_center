@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.learningcenter.entity.base.BaseEntity;
-import org.example.learningcenter.entity.dto.user.UserCreateDto;
 
 import java.math.BigDecimal;
 
@@ -29,9 +28,6 @@ public class Branch  extends BaseEntity {
     private String name;
 
     private String address;
-    private String email;
-
-    private String phone;
 
     // Google Maps Data
     private String googlePlaceId;

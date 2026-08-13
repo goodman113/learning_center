@@ -5,9 +5,11 @@ import org.example.learningcenter.entity.dto.InvoiceDto;
 import org.example.learningcenter.entity.dto.InvoiceUpdateDto;
 import org.example.learningcenter.entity.enums.InvoiceStatus;
 import org.example.learningcenter.entity.model.Invoice;
+import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.InvoiceMapper;
 import org.example.learningcenter.projection.InvoiceProjection;
 import org.example.learningcenter.repository.InvoiceRepository;
+import org.example.learningcenter.repository.StudentRepository;
 import org.example.learningcenter.validator.InvoiceValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +23,10 @@ public class InvoiceService extends AbstractService<
         InvoiceMapper,
         InvoiceValidator> implements CrudService<InvoiceCreateDto, InvoiceUpdateDto, InvoiceDto, String> {
 
-    protected InvoiceService(InvoiceRepository repository, InvoiceMapper mapper, InvoiceValidator validator) {
+    final StudentRepository studentRepository;
+    protected InvoiceService(InvoiceRepository repository, InvoiceMapper mapper, InvoiceValidator validator, StudentRepository studentRepository) {
         super(repository, mapper, validator);
+        this.studentRepository = studentRepository;
     }
 
     private String wrapSearch(String search) {
@@ -45,6 +49,10 @@ public class InvoiceService extends AbstractService<
     @Override
     public InvoiceDto create(InvoiceCreateDto createDto) {
         Invoice invoice = mapper.toEntity(createDto);
+
+        Student student = invoice.getStudent();
+        student.setBalance(student.getBalance().add(createDto.amount()));
+        studentRepository.save(student);
         return mapper.toDto(repository.save(invoice));
     }
 

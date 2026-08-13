@@ -11,6 +11,7 @@ import org.example.learningcenter.entity.model.Student;
 import org.example.learningcenter.mapper.EnrollmentMapper;
 import org.example.learningcenter.mapper.StudentMapper;
 import org.example.learningcenter.repository.EnrollmentRepository;
+import org.example.learningcenter.repository.StudentRepository;
 import org.example.learningcenter.validator.EnrollmentValidator;
 import org.example.learningcenter.validator.GroupValidator;
 import org.example.learningcenter.validator.StudentValidator;
@@ -27,12 +28,14 @@ public class EnrollmentService extends AbstractService<
     private final StudentValidator studentValidator;
     private final GroupValidator groupValidator;
     private final StudentMapper studentMapper;
+    private final StudentRepository studentRepository;
 
-    protected EnrollmentService(EnrollmentRepository repository, EnrollmentMapper mapper, EnrollmentValidator validator, StudentValidator studentValidator, GroupValidator groupValidator, StudentMapper studentMapper) {
+    protected EnrollmentService(EnrollmentRepository repository, EnrollmentMapper mapper, EnrollmentValidator validator, StudentValidator studentValidator, GroupValidator groupValidator, StudentMapper studentMapper, StudentRepository studentRepository) {
         super(repository, mapper, validator);
         this.studentValidator = studentValidator;
         this.groupValidator = groupValidator;
         this.studentMapper = studentMapper;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -56,6 +59,8 @@ public class EnrollmentService extends AbstractService<
     public EnrollmentDto create(EnrollmentCreateDto createDto) {
         Student student = studentValidator.validateIdAndGet(createDto.studentId());
         Group group = groupValidator.validateIdAndGet(createDto.groupId());
+        student.setBalance(student.getBalance().subtract(group.getBranch().getChargeForMonth()));
+        studentRepository.save(student);
         Enrollment enrollment = new Enrollment(student, group, createDto.reason(), null);
         return mapper.toDto(repository.save(enrollment));
     }

@@ -6,6 +6,7 @@ import org.example.learningcenter.entity.dto.attendance.AttendanceDto;
 import org.example.learningcenter.entity.dto.attendance.AttendanceUpdateDto;
 import org.example.learningcenter.service.AttendanceService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,11 @@ public class AttendanceController {
 
     @GetMapping
     public ResponseEntity<Page<AttendanceDto>> getAll(
-            Pageable pageable,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String search
     ) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<AttendanceDto> attendances = service.getAll(pageable, search);
         return ResponseEntity.ok(attendances);
     }

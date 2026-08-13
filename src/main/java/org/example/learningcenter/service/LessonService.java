@@ -4,7 +4,8 @@ import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.dto.lesson.LessonCreateDto;
 import org.example.learningcenter.entity.dto.lesson.LessonDto;
 import org.example.learningcenter.entity.dto.lesson.LessonUpdateDto;
-import org.example.learningcenter.entity.enums.ErrorType;
+import org.example.learningcenter.exceptions.ErrorCodes;
+import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.Group;
 import org.example.learningcenter.entity.model.Lesson;
 import org.example.learningcenter.exceptions.RestException;
@@ -61,7 +62,7 @@ public class LessonService extends AbstractService<
 
     private Lesson toEntity(LessonCreateDto createDto) {
         Group group = groupRepository.findById(createDto.groupId())
-                .orElseThrow(() -> RestException.restThrow(ErrorType.GROUP_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorType.GROUP_NOT_FOUND, ErrorCodes.NotFound));
         return new Lesson(
                 createDto.lessonName(),
                 false,
