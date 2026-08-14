@@ -8,7 +8,6 @@ import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.entity.model.User;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

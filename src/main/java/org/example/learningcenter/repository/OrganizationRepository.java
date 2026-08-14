@@ -1,7 +1,6 @@
 package org.example.learningcenter.repository;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.example.learningcenter.entity.model.Organization;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,11 +1,9 @@
 package org.example.learningcenter.service;
 
-import jakarta.validation.Valid;
+
 import org.example.learningcenter.entity.dto.organization.OrganizationCreateDto;
 import org.example.learningcenter.entity.dto.organization.OrganizationDto;
 import org.example.learningcenter.entity.dto.organization.OrganizationUpdateDto;
-import org.example.learningcenter.entity.dto.user.UserCreateDto;
-import org.example.learningcenter.entity.enums.Role;
 import org.example.learningcenter.entity.model.Organization;
 import org.example.learningcenter.mapper.OrganizationMapper;
 import org.example.learningcenter.repository.OrganizationRepository;

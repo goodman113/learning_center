@@ -1,15 +1,12 @@
 package org.example.learningcenter.validator;
 
 import lombok.RequiredArgsConstructor;
-import org.example.learningcenter.entity.dto.branch.BranchCreateDto;
 import org.example.learningcenter.entity.model.Branch;
 import org.example.learningcenter.exceptions.ErrorCodes;
 import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.BranchRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor

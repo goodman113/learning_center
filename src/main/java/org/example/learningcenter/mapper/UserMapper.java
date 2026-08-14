@@ -5,13 +5,11 @@ import org.example.learningcenter.entity.dto.user.UserCreateDto;
 import org.example.learningcenter.entity.dto.user.UserDto;
 import org.example.learningcenter.entity.dto.user.UserUpdateDto;
 import org.example.learningcenter.entity.model.User;
-import org.example.learningcenter.service.Generator;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {

@@ -12,15 +12,12 @@ import org.example.learningcenter.exceptions.ErrorType;
 import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.mapper.BranchMapper;
 import org.example.learningcenter.repository.BranchRepository;
-import org.example.learningcenter.repository.OrganizationRepository;
 import org.example.learningcenter.validator.BranchValidator;
 import org.example.learningcenter.validator.OrganizationValidator;
 import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 public class BranchService extends AbstractService<
