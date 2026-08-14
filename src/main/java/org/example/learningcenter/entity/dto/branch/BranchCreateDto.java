@@ -5,7 +5,6 @@ import org.example.learningcenter.entity.model.Organization;
 import java.math.BigDecimal;
 
 public record BranchCreateDto(
-        String organizationId,
         BigDecimal chargeForMonth,
         String name,
         String address,

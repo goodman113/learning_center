@@ -15,14 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
-
-    @Autowired
-    protected Generator generator;
-
     public abstract UserDto toDto(User user);
 
     @IgnoreAuditFields
-    @Mapping(target = "password", expression = "java(generator.generatePassword())")
     @Mapping(target = "branch", ignore = true)
     @Mapping(target = "organization", ignore = true)
     public abstract User toEntity(UserCreateDto createDto);

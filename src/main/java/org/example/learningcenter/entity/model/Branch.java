@@ -34,5 +34,4 @@ public class Branch  extends BaseEntity {
     private Double latitude;
     private Double longitude;
     private String googleMapsUrl;
-
 }

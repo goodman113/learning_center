@@ -1,10 +1,12 @@
 package org.example.learningcenter.repository;
 
+import jakarta.transaction.Transactional;
 import org.example.learningcenter.entity.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -25,19 +27,26 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByPhone(@Param("phone") String subject);
 
     @Query("""
-        select u
-        from User u where u.phone = :username
-""")
+                    select u
+                    from User u where u.phone = :username
+            """)
     Optional<User> findUserByPhone(String username);
 
 
     @Query("""
-        select u
-        from User u
-         left join fetch u.branch
-         where u.id = :s
-         and u.deleted = false
-""")
+                    select u
+                    from User u
+                     left join fetch u.branch
+                     where u.id = :s
+                     and u.deleted = false
+            """)
     Optional<User> findByIdAndDeletedFalse(String s);
 
+    @Query("select exists (select u.id from User u where u.id=:id and u.deleted = false)")
+    Optional<Boolean> checkId(@Param("id") String id);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u set u.deleted = true where u.id=:id and u.organization.id = :orgId")
+    int softDelete(@Param("id") String id, @Param("orgId") String organizationId);
 }

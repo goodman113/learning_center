@@ -10,6 +10,8 @@ import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.OrganizationRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class OrganizationValidator {
@@ -29,5 +31,11 @@ public class OrganizationValidator {
     public void validate(OrganizationUpdateDto updateDto) {
 
 
+    }
+
+    public void validateOrganizationMatch(String systemOrgId, String reqUserOrganizationId) {
+        if (!Objects.equals(systemOrgId, reqUserOrganizationId)) {
+            throw new RestException(ErrorType.FORBIDDEN, ErrorCodes.Unauthorized);
+        }
     }
 }

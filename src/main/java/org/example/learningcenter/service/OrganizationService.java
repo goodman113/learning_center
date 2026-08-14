@@ -10,6 +10,7 @@ import org.example.learningcenter.entity.model.Organization;
 import org.example.learningcenter.mapper.OrganizationMapper;
 import org.example.learningcenter.repository.OrganizationRepository;
 import org.example.learningcenter.validator.OrganizationValidator;
+import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,11 @@ public class OrganizationService extends AbstractService<
         OrganizationRepository,
         OrganizationMapper,
         OrganizationValidator> implements CrudService<OrganizationCreateDto, OrganizationUpdateDto, OrganizationDto, String> {
+    private final UserValidator userValidator;
 
-    private final UserService userService;
-    private final Generator generator;
-
-    protected OrganizationService(OrganizationRepository repository, OrganizationMapper mapper, OrganizationValidator validator, UserService userService, Generator generator) {
+    protected OrganizationService(OrganizationRepository repository, OrganizationMapper mapper, OrganizationValidator validator, UserValidator userValidator) {
         super(repository, mapper, validator);
-        this.userService = userService;
-        this.generator = generator;
+        this.userValidator = userValidator;
     }
 
     @Override
@@ -37,6 +35,8 @@ public class OrganizationService extends AbstractService<
 
     @Override
     public OrganizationDto get(String id) {
+        String organizationId = userValidator.authenticateAndGetOrganizationId();
+        validator.validateOrganizationMatch(id, organizationId);
         Organization organization = validator.validateAndGetId(id);
         return mapper.toDto(organization);
     }
@@ -45,20 +45,23 @@ public class OrganizationService extends AbstractService<
     public OrganizationDto create(OrganizationCreateDto createDto) {
         validator.validate(createDto);
         Organization entity = mapper.toEntity(createDto);
-        OrganizationDto dto = mapper.toDto(repository.save(entity));
-        return dto;
+        return mapper.toDto(repository.save(entity));
     }
 
     @Override
     public OrganizationDto update(OrganizationUpdateDto updateDto, String id) {
         validator.validate(updateDto);
+        String organizationId = userValidator.authenticateAndGetOrganizationId();
+        validator.validateOrganizationMatch(id,organizationId);
         Organization organization = validator.validateAndGetId(id);
-        mapper.mapUpdate(organization,updateDto);
+        mapper.mapUpdate(organization, updateDto);
         return mapper.toDto(repository.save(organization));
     }
 
     @Override
     public void delete(String id) {
-
+        String organizationId = userValidator.authenticateAndGetOrganizationId();
+        validator.validateOrganizationMatch(id, organizationId);
+        repository.softDelete(id);
     }
 }

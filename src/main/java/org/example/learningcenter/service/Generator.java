@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,16 +16,8 @@ public class Generator {
     private final Random random = new Random();
     private final PasswordEncoder passwordEncoder;
 
-    public String generatePassword() {
-        StringBuilder sb = new StringBuilder();
-        String string = UUID.randomUUID().toString();
-        int i = 0;
-        while (sb.length() < 8) {
-            char c = string.charAt(i);
-            if (Character.isAlphabetic(c) || Character.isDigit(c)) sb.append(c);
-            i++;
-        }
-        return passwordEncoder.encode(sb);
+    public String generatePassword(LocalDateTime dateOfBirth) {
+        return passwordEncoder.encode(dateOfBirth.toString().replace('-','.'));
     }
 
     public String generateSuperAdminName(String orgName) {

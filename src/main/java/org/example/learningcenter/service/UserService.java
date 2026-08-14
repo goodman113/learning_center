@@ -27,11 +27,12 @@ import org.springframework.stereotype.Service;
 public class UserService extends AbstractService<
         UserRepository,
         UserMapper,
-        UserValidator> implements CrudService<UserCreateDto, UserUpdateDto, UserDto,String>{
+        UserValidator> implements CrudService<UserCreateDto, UserUpdateDto, UserDto, String> {
 
     final BranchRepository branchRepository;
     final BranchValidator branchValidator;
     final OrganizationValidator organizationValidator;
+
     protected UserService(UserRepository repository, UserMapper mapper, UserValidator validator, BranchRepository branchRepository, BranchValidator branchValidator, OrganizationValidator organizationValidator) {
         super(repository, mapper, validator);
         this.branchRepository = branchRepository;
@@ -54,9 +55,10 @@ public class UserService extends AbstractService<
     @Override
     public UserDto create(UserCreateDto createDto) {
         validator.validate(createDto);
+        String organizationId = validator.authenticateAndGetOrganizationId();
         User entity = mapper.toEntity(createDto);
         Branch branch = branchValidator.validateIdAndGet(createDto.branchId());
-        Organization organization = organizationValidator.validateAndGetId(createDto.organizationId());
+        Organization organization = organizationValidator.validateAndGetId(organizationId);
         entity.setBranch(branch);
         entity.setOrganization(organization);
         User save = repository.save(entity);
@@ -66,23 +68,19 @@ public class UserService extends AbstractService<
     @Override
     public UserDto update(UserUpdateDto updateDto, String id) {
         User user = validator.validateIdAndGet(id);
-        mapper.mapUpdate(user,updateDto);
+        String organizationId = validator.authenticateAndGetOrganizationId();
+        organizationValidator.validateOrganizationMatch(user.getOrganization().getId(), organizationId);
+        mapper.mapUpdate(user, updateDto);
         return mapper.toDto(repository.save(user));
     }
 
     @Override
     public void delete(String id) {
-        User user = validator
-                .validateIdAndGet(id);
-        user.setDeleted(true);
-        repository.save(user);
-    }
-
-
-    public User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails user1 = (UserDetails) auth.getPrincipal();
-        return repository.findUserByPhone(user1.getUsername())
-                .orElseThrow(() -> new RestException(ErrorType.USER_NOT_FOUND, ErrorCodes.NotFound));
+        validator.validateId(id);
+        String organizationId = validator.authenticateAndGetOrganizationId();
+        int rowsUpdated = repository.softDelete(id, organizationId);
+        if (rowsUpdated == 0) {
+            throw new RestException(ErrorType.FORBIDDEN, ErrorCodes.Unauthorized);
+        }
     }
 }

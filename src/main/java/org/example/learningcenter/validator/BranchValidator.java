@@ -9,6 +9,8 @@ import org.example.learningcenter.exceptions.RestException;
 import org.example.learningcenter.repository.BranchRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class BranchValidator {
@@ -24,5 +26,12 @@ public class BranchValidator {
     public Branch validateIdAndGet(String id) {
         return branchRepository.findById(id).orElseThrow(() ->
                 new RestException(ErrorType.BRANCH_NOT_FOUND, ErrorCodes.NotFound));
+    }
+
+    public void validateId(String id) {
+        Boolean exists = branchRepository.checkId(id).orElse(false);
+        if (!exists){
+            throw new RestException(ErrorType.BRANCH_NOT_FOUND,ErrorCodes.NotFound);
+        }
     }
 }

@@ -14,6 +14,7 @@ import org.example.learningcenter.repository.GroupRepository;
 import org.example.learningcenter.repository.TeacherRepository;
 import org.example.learningcenter.validator.LessonValidator;
 import org.example.learningcenter.repository.LessonRepository;
+import org.example.learningcenter.validator.UserValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,16 +24,16 @@ public class LessonService extends AbstractService<
         LessonRepository,
         LessonMapper,
         LessonValidator> implements CrudService<LessonCreateDto, LessonUpdateDto, LessonDto, String> {
-    final UserService userService;
     final TeacherRepository teacherRepository;
     private final GroupRepository groupRepository;
+    private final UserValidator userValidator;
 
 
-    protected LessonService(LessonRepository repository, LessonMapper mapper, LessonValidator validator, UserService userService, TeacherRepository teacherRepository, GroupRepository groupRepository) {
+    protected LessonService(LessonRepository repository, LessonMapper mapper, LessonValidator validator, TeacherRepository teacherRepository, GroupRepository groupRepository, UserValidator userValidator) {
         super(repository, mapper, validator);
-        this.userService = userService;
         this.teacherRepository = teacherRepository;
         this.groupRepository = groupRepository;
+        this.userValidator = userValidator;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class LessonService extends AbstractService<
                 createDto.lessonName(),
                 false,
                 group,
-                teacherRepository.findTeacherByUser_Id(userService.getCurrentUser().getId()),
+                teacherRepository.findTeacherByUser_Id(userValidator.authenticateAndGetId()),
                 group.getLevel()
         );
     }

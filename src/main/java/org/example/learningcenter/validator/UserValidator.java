@@ -29,12 +29,33 @@ public class UserValidator {
     }
 
     public String authenticateAndGetId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
-            assert principal != null;
-            return principal.getUserId();
+        return getPrincipal().getUserId();
+    }
+
+    public String authenticateAndGetOrganizationId() {
+        String orgId = getPrincipal().getOrganizationId();
+        if (orgId == null) {
+            throw new RestException(ErrorType.ORGANIZATION_NOT_FOUND, ErrorCodes.NotFound);
         }
+        return orgId;
+    }
+
+    private CustomUserDetails getPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null
+                && authentication.isAuthenticated()
+                && authentication.getPrincipal() instanceof CustomUserDetails principal) {
+            return principal;
+        }
+
         throw new RestException(ErrorType.UNAUTHORIZED, ErrorCodes.Unauthorized);
+    }
+
+    public void validateId(String id) {
+        Boolean exists = repository.checkId(id).orElse(false);
+        if (!exists){
+            throw new RestException(ErrorType.USER_NOT_FOUND,ErrorCodes.NotFound);
+        }
     }
 }
