@@ -61,15 +61,18 @@ public class JwtUtils {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("role", user.getRole().name());
+        if (user.getOrganization() != null) {
+            claims.put("organizationId", user.getOrganization().getId());
+        }
         return claims;
     }
 
-    public Map<String, Object> prepareClaims(UserDto user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.id());
-        claims.put("role",user.role().name());
-        return claims;
-    }
+    //    public Map<String, Object> prepareClaims(UserDto user) {
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("userId", user.id());
+//        claims.put("role", user.role().name());
+//        return claims;
+//    }
 
     /**
      * Original entry point — unchanged behavior for every existing caller.
